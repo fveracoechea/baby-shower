@@ -1,0 +1,64 @@
+diff --git a/src/dom.d.ts b/src/dom.d.ts
+index 1691faf562389ce55c741421c144a8d192d2352c..e066ee8bb2e4b76fb7239defa9aff4d87cd16765 100644
+--- a/src/dom.d.ts
++++ b/src/dom.d.ts
+@@ -1256,8 +1256,11 @@ export interface AllHTMLAttributes<RefType extends EventTarget = EventTarget>
+ 	challenge?: Signalish<string | undefined>;
+ 	checked?: Signalish<boolean | undefined>;
+ 	cite?: Signalish<string | undefined>;
+-	class?: Signalish<string | undefined>;
+-	className?: Signalish<string | undefined>;
++	/**
++	 * @deprecated Global override: Do not use the class attribute.
++	 */
++	class?: never;
++	className?: string;
+ 	cols?: Signalish<number | undefined>;
+ 	colSpan?: Signalish<number | undefined>;
+ 	colspan?: Signalish<number | undefined>;
+@@ -1492,8 +1495,11 @@ export interface HTMLAttributes<RefType extends EventTarget = EventTarget>
+ 	autoCorrect?: Signalish<string | undefined>;
+ 	autofocus?: Signalish<boolean | undefined>;
+ 	autoFocus?: Signalish<boolean | undefined>;
+-	class?: Signalish<string | undefined>;
+-	className?: Signalish<string | undefined>;
++	/**
++	 * @deprecated Global override: Do not use the class attribute.
++	 */
++	class?: never;
++	className?: string;
+ 	contenteditable?: Signalish<
+ 		Booleanish | '' | 'plaintext-only' | 'inherit' | undefined
+ 	>;
+diff --git a/src/jsx.d.ts b/src/jsx.d.ts
+index ce1afdb807563b58f40dfa5959d3077f6737414e..0d5f604b598f9351354a232c7f5317c3e0371489 100644
+--- a/src/jsx.d.ts
++++ b/src/jsx.d.ts
+@@ -1355,8 +1355,11 @@ export namespace JSXInternal {
+ 		challenge?: Signalish<string | undefined>;
+ 		checked?: Signalish<boolean | undefined>;
+ 		cite?: Signalish<string | undefined>;
+-		class?: Signalish<string | undefined>;
+-		className?: Signalish<string | undefined>;
++		/**
++		 * @deprecated Global override: Do not use the class attribute.
++		 */
++		class?: never;
++		className?: string;
+ 		cols?: Signalish<number | undefined>;
+ 		colSpan?: Signalish<number | undefined>;
+ 		colspan?: Signalish<number | undefined>;
+@@ -1592,8 +1595,11 @@ export namespace JSXInternal {
+ 		autoCorrect?: Signalish<string | undefined>;
+ 		autofocus?: Signalish<boolean | undefined>;
+ 		autoFocus?: Signalish<boolean | undefined>;
+-		class?: Signalish<string | undefined>;
+-		className?: Signalish<string | undefined>;
++		/**
++		 * @deprecated Global override: Do not use the class attribute.
++		 */
++		class?: never;
++		className?: string;
+ 		contenteditable?: Signalish<
+ 			Booleanish | '' | 'plaintext-only' | 'inherit' | undefined
+ 		>;

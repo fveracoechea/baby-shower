@@ -21,17 +21,19 @@ afterAll(async () => {
 function stubFetchThroughApp() {
   const calls: { url: string; body: unknown }[] = [];
   globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+    const text =
+      input instanceof Request ? await input.clone().text() : init?.body ? String(init.body) : "";
     calls.push({
-      url: String(input),
-      body: init?.body ? JSON.parse(String(init.body)) : undefined,
+      url: input instanceof Request ? input.url : String(input),
+      body: text ? JSON.parse(text) : undefined,
     });
-    return app.request(String(input), init);
+    return app.request(input, init);
   }) as typeof fetch;
   return calls;
 }
 
 describe("RsvpForm island", () => {
-  test("submits the rsvp through the hono rpc client", async () => {
+  test("submits the rsvp through the orpc client", async () => {
     const calls = stubFetchThroughApp();
     const { container, findByText, getByLabelText, getByRole } = render(<RsvpForm lang="en" />);
 
@@ -47,13 +49,15 @@ describe("RsvpForm island", () => {
 
     await findByText("RSVP received. Thank you.");
     expect(calls).toHaveLength(1);
-    expect(calls[0].url).toBe("/api/rsvp");
+    expect(calls[0].url).toBe("http://localhost:3000/rpc/rsvp");
     expect(calls[0].body).toEqual({
-      name: "Ada Lovelace",
-      attending: false,
-      plusOne: true,
-      plusOneName: "Grace",
-      theory: "girl",
+      json: {
+        name: "Ada Lovelace",
+        attending: "no",
+        plusOne: "on",
+        plusOneName: "Grace",
+        theory: "girl",
+      },
     });
   });
 
@@ -69,7 +73,7 @@ describe("RsvpForm island", () => {
 
   test("hydrates preact-island custom elements", async () => {
     registerIslands();
-    document.body.innerHTML = `<preact-island src="RsvpForm"></preact-island>`;
+    document.body.innerHTML = `<preact-island src="RsvpForm" data-props='{"lang":"es"}'></preact-island>`;
     const element = document.querySelector("preact-island")!;
 
     await waitFor(() => {

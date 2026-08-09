@@ -1,3 +1,4 @@
+import "@fontsource-variable/truculenta";
 import { registerIslands } from "./lib/preact-islands";
 
 export const ISLANDS = {

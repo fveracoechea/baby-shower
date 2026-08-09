@@ -6,7 +6,7 @@ describe("home route", () => {
     const res = await app.request("/");
     expect(res.status).toBe(200);
     const html = await res.text();
-    expect(html.startsWith("<!doctype html>")).toBe(true);
+    expect(html.startsWith("<!DOCTYPE html>")).toBe(true);
     expect(html).toContain('<html lang="es">');
     expect(html).toContain("El Misterio");
     expect(html).toContain('<preact-island src="RsvpForm"');

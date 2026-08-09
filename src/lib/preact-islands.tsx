@@ -1,4 +1,4 @@
-import type { FunctionalComponent, HTMLAttributes } from "preact";
+import type { FunctionalComponent } from "preact";
 import hydrate from "preact-iso/hydrate";
 import { ISLANDS } from "../islands";
 
@@ -36,7 +36,12 @@ export function island<P extends ObjectAny>(
     }
 
     return (
-      <preact-island src={islandName} visible={visible} media={media}>
+      <preact-island
+        src={islandName}
+        visible={visible}
+        media={media}
+        data-props={JSON.stringify(runtimeProps)}
+      >
         <Component {...(runtimeProps as P)} />
       </preact-island>
     );
@@ -69,8 +74,9 @@ function createPreactIslandClass(): typeof HTMLElement {
 
       const mod = await load();
       const Component = mod.default;
+      const props = JSON.parse(this.getAttribute("data-props") ?? "{}");
 
-      hydrate(<Component />, this);
+      hydrate(<Component {...props} />, this);
     }
   };
 }
@@ -117,6 +123,7 @@ declare module "preact/jsx-runtime" {
         visible?: boolean | string;
         media?: string;
         src: keyof typeof ISLANDS;
+        "data-props"?: string;
       };
     }
   }

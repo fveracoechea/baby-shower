@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-base: #faf4ed;
-  --color-surface: #fffaf3;
-  --color-overlay: #f2e9e1;
-  --color-text: #575279;
-  --color-subtle: #797593;
-  --color-foam: #56949f;
-  --color-iris: #907aa9;
-  --color-rose: #d7827e;
+  --font-display: "Truculenta Variable", sans-serif;
+}
+
+@theme inline {
+  --color-base: var(--color-mist-50);
+  --color-surface: var(--color-white);
+  --color-overlay: var(--color-mist-200);
+  --color-text: var(--color-mauve-800);
+  --color-subtle: var(--color-mauve-500);
+  --color-primary: var(--color-emerald-400);
+  --color-secondary: var(--color-pink-400);
+  --color-destructive: var(--color-red-400);
 }

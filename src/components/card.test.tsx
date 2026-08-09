@@ -14,7 +14,7 @@ describe("Card", () => {
   });
 
   test("merges a custom class", () => {
-    const html = renderToString(<Card class="gap-8">Clue</Card>);
+    const html = renderToString(<Card className="gap-8">Clue</Card>);
     expect(html).toContain("gap-8");
   });
 });

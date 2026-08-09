@@ -1,78 +1,76 @@
 import { useState } from "preact/hooks";
 import { Button } from "../components/button";
-import { client } from "../lib/client";
-import { asLanguage, t, type Language } from "../lib/i18n";
+import { $, safe, getIssueMessage, parseFormData } from "../lib/client";
+import { t, type Language } from "../lib/i18n";
 import { island } from "../lib/preact-islands";
+import type { TargetedSubmitEvent } from "preact";
+import { H1 } from "../components/typography";
 
 type RsvpFormProps = {
-  lang?: Language;
+  lang: Language;
 };
 
 function RsvpForm({ lang }: RsvpFormProps) {
-  const resolvedLang =
-    lang ?? asLanguage(typeof document === "undefined" ? undefined : document.documentElement.lang);
-  const m = t(resolvedLang);
+  const m = t(lang);
+
   const [status, setStatus] = useState<"idle" | "submitting" | "done" | "error">("idle");
+  const [formError, setError] = useState<Error | null>(null);
 
-  async function handleSubmit(event: Event) {
+  async function handleSubmit(event: TargetedSubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget as HTMLFormElement);
     setStatus("submitting");
-    try {
-      const res = await client.api.rsvp.$post({
-        json: {
-          name: String(data.get("name") ?? ""),
-          attending: data.get("attending") === "yes",
-          plusOne: data.get("plusOne") === "on",
-          plusOneName: String(data.get("plusOneName") ?? "").trim() || undefined,
-          theory: (data.get("theory") as "girl" | "boy" | null) ?? undefined,
-        },
-      });
-      setStatus(res.ok ? "done" : "error");
-    } catch {
+    const input = parseFormData(new FormData(event.currentTarget));
+    console.log("input", input);
+    const { error, data } = await safe($.rsvp(input));
+    if (error) {
+      setError(error);
       setStatus("error");
+      return;
     }
+    setError(null);
+    setStatus("done");
+    console.log(data);
   }
 
-  if (status === "done") {
-    return <p class="text-foam">{m.submittedMessage}</p>;
-  }
+  console.log({ status });
 
   return (
-    <form onSubmit={handleSubmit} class="flex flex-col gap-4">
-      <label class="flex flex-col gap-1">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+      <H1>TEST</H1>
+      <label className="flex flex-col gap-1">
         <span>{m.nameLabel}</span>
-        <input name="name" required class="border border-overlay bg-base px-2 py-1" />
+        <input name="name" required className="border border-overlay bg-base px-2 py-1" />
+        <span className="text-destructive">{getIssueMessage(formError, "name")}</span>
       </label>
 
-      <fieldset class="flex gap-4">
-        <label class="flex items-center gap-2">
+      <fieldset className="flex gap-4">
+        <label className="flex items-center gap-2">
           <input type="radio" name="attending" value="yes" checked />
           <span>{m.attendingYes}</span>
         </label>
-        <label class="flex items-center gap-2">
+        <label className="flex items-center gap-2">
           <input type="radio" name="attending" value="no" />
           <span>{m.attendingNo}</span>
         </label>
       </fieldset>
 
-      <label class="flex items-center gap-2">
+      <label className="flex items-center gap-2">
         <input type="checkbox" name="plusOne" />
         <span>{m.plusOneLabel}</span>
       </label>
 
-      <label class="flex flex-col gap-1">
+      <label className="flex flex-col gap-1">
         <span>{m.plusOneNameLabel}</span>
-        <input name="plusOneName" class="border border-overlay bg-base px-2 py-1" />
+        <input name="plusOneName" className="border border-overlay bg-base px-2 py-1" />
       </label>
 
-      <fieldset class="flex gap-4">
-        <legend class="text-subtle">{m.theoryLabel}</legend>
-        <label class="flex items-center gap-2">
+      <fieldset className="flex gap-4">
+        <legend className="text-subtle">{m.theoryLabel}</legend>
+        <label className="flex items-center gap-2">
           <input type="radio" name="theory" value="girl" />
           <span>{m.theoryGirl}</span>
         </label>
-        <label class="flex items-center gap-2">
+        <label className="flex items-center gap-2">
           <input type="radio" name="theory" value="boy" />
           <span>{m.theoryBoy}</span>
         </label>
@@ -83,7 +81,7 @@ function RsvpForm({ lang }: RsvpFormProps) {
       </Button>
 
       {status === "error" && (
-        <p role="alert" class="text-rose">
+        <p role="alert" className="text-rose-700">
           {m.errorMessage}
         </p>
       )}
