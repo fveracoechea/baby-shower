@@ -1,6 +1,6 @@
 # Baby-shower invitation app
 
-One-off invitation app for one combined baby-shower + gender-reveal event: landing page with photos, name-only RSVP, post-confirmation location/time reveal, tailnet-gated admin view. Bilingual ES/EN.
+Invitation app for one combined baby-shower + gender-reveal event: landing page with photos, name-only RSVP, post-confirmation location/time reveal, tailnet-gated admin view. Bilingual ES/EN.
 
 ## Stack
 
@@ -11,7 +11,7 @@ One-off invitation app for one combined baby-shower + gender-reveal event: landi
 - Zod schemas in `src/lib/schemas/`
 - i18n: Hono `languageDetector` + hand-rolled dictionaries (`src/lib/i18n.ts`)
 - Drizzle + `bun:sqlite` (planned; not wired yet)
-- `Bun.Image` server-side image optimization (planned; ticket #12 on the tracker)
+- `Bun.Image` server-side image optimization (planned; ticket #11 on the tracker)
 
 ## Commands
 
@@ -36,5 +36,5 @@ Run `lint`, `format`, `check-types`, and `test` before committing.
 
 ## Boundaries
 
-- **Issue tracker**: all tickets live on `github.com/fveracoechea/homelab` (wayfinder map #1). Issues are disabled on this repo on purpose.
+- **Issue tracker**: all tickets live in this repo's issues (wayfinder map: #1). Wayfinding operations (sub-issues, blocking, frontier queries) are documented in `docs/agents/issue-tracker.md` in the homelab repo; substitute repo `fveracoechea/baby-shower`.
 - **Deployment**: nix packaging, OCI image, and the `services/baby-shower.nix` module live in the homelab flake. Do not add nix files to this repo.
