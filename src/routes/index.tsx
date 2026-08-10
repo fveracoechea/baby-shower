@@ -1,14 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/')({ component: Home })
-
-function Home() {
-  return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">Welcome to TanStack Start</h1>
-      <p className="mt-4 text-lg">
-        Edit <code>src/routes/index.tsx</code> to get started.
-      </p>
-    </div>
-  )
-}
+// Temporary: the real landing is build ticket #17, blocked on the
+// visual-direction pick (#13). Until then, the root sends guests to the
+// prototype gallery.
+export const Route = createFileRoute("/")({
+	beforeLoad: () => {
+		throw redirect({ to: "/prototype/mystery", search: { variant: "noir" } });
+	},
+});
