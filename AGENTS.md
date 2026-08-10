@@ -2,18 +2,6 @@
 
 Invitation app for one combined baby-shower + gender-reveal event: landing page with photos, name-only RSVP, post-confirmation location/time reveal, tailnet-gated admin view. Bilingual ES/EN.
 
-## Stack
-
-- Bun runtime + Bun bundler
-- Hono (HTTP framework) + @hono/zod-validator + Hono RPC (`hc`)
-- Preact SSR with streaming + islands hydration (hooks, no signals)
-- Tailwind CSS v4 (`@theme` in `src/global.css`) + tailwind-variants
-- Fonts via Fontsource variable packages (`@fontsource-variable/truculenta`), imported in `src/islands.ts` and served through `static/islands.css`
-- Zod schemas in `src/lib/schemas/`
-- i18n: Hono `languageDetector` + hand-rolled dictionaries (`src/lib/i18n.ts`)
-- Drizzle + `bun:sqlite`
-- `Bun.Image` server-side image optimization (planned; ticket #11 on the tracker)
-
 ## Agent skills
 
 ### Issue tracker

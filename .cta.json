@@ -1,0 +1,30 @@
+{
+  "projectName": "baby-shower",
+  "mode": "file-router",
+  "typescript": true,
+  "packageManager": "bun",
+  "includeExamples": false,
+  "tailwind": true,
+  "projectPreset": "default",
+  "addOnOptions": {
+    "drizzle": {
+      "database": "sqlite"
+    }
+  },
+  "git": false,
+  "install": true,
+  "intent": true,
+  "routerOnly": false,
+  "version": 1,
+  "framework": "react",
+  "chosenAddOns": [
+    "biome",
+    "nitro",
+    "drizzle",
+    "oRPC",
+    "paraglide",
+    "shadcn",
+    "t3env",
+    "tanstack-query"
+  ]
+}
