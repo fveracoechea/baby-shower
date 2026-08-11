@@ -1,5 +1,6 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
+import { deLocalizeUrl, localizeUrl } from './paraglide/runtime'
 
 import type { ReactNode } from 'react'
 import { QueryClient } from '@tanstack/react-query'
@@ -17,6 +18,20 @@ export function getRouter() {
     scrollRestoration: true,
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
+    // Paraglide url strategy: the router matches delocalized URLs (/es/x -> /x)
+    // and emits localized ones (/x -> /es/x when the locale is es).
+    rewrite: {
+      input: ({ url }) => deLocalizeUrl(url),
+      output: ({ url }) => {
+        const localized = localizeUrl(url)
+        // canonical form carries no trailing slash (except the root itself):
+        // localizing "/" yields "/es/", but the canonical es root is "/es"
+        if (localized.pathname.length > 1 && localized.pathname.endsWith('/')) {
+          localized.pathname = localized.pathname.slice(0, -1)
+        }
+        return localized
+      },
+    },
   })
 
   setupRouterSsrQueryIntegration({ router, queryClient: context.queryClient })

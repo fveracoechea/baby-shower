@@ -1,46 +1,36 @@
-// Locale switcher refs:
-// - Paraglide docs: https://inlang.com/m/gerre34r/library-inlang-paraglideJs
-// - Router example: https://github.com/TanStack/router/tree/main/examples/react/i18n-paraglide#switching-locale
-import { getLocale, locales, setLocale } from '#/paraglide/runtime'
-import { m } from '#/paraglide/messages'
+import { ToggleGroup, ToggleGroupItem } from "#/components/ui/toggle-group";
+import { m } from "#/paraglide/messages";
+import { getLocale, isLocale, locales, setLocale } from "#/paraglide/runtime";
 
-export default function ParaglideLocaleSwitcher() {
-  const currentLocale = getLocale()
+/**
+ * Floating locale pill, visible on every state of the landing.
+ * EN lives at /, ES at /es; setLocale navigates to the localized URL.
+ */
+export default function LocaleSwitcher() {
+	const current = getLocale();
 
-  return (
-    <div
-      style={{
-        display: 'flex',
-        gap: '0.5rem',
-        alignItems: 'center',
-        color: 'inherit',
-      }}
-      aria-label={m.language_label()}
-    >
-      <span style={{ opacity: 0.85 }}>
-        {m.current_locale({ locale: currentLocale })}
-      </span>
-      <div style={{ display: 'flex', gap: '0.25rem' }}>
-        {locales.map((locale) => (
-          <button
-            key={locale}
-            onClick={() => setLocale(locale)}
-            aria-pressed={locale === currentLocale}
-            style={{
-              cursor: 'pointer',
-              padding: '0.35rem 0.75rem',
-              borderRadius: '999px',
-              border: '1px solid #d1d5db',
-              background: locale === currentLocale ? '#0f172a' : 'transparent',
-              color: locale === currentLocale ? '#f8fafc' : 'inherit',
-              fontWeight: locale === currentLocale ? 700 : 500,
-              letterSpacing: '0.01em',
-            }}
-          >
-            {locale.toUpperCase()}
-          </button>
-        ))}
-      </div>
-    </div>
-  )
+	return (
+		<div className="fixed top-4 right-4 z-50 rounded-full border border-stone-700 bg-stone-950/85 p-1 shadow-lg backdrop-blur-sm">
+			<ToggleGroup
+				type="single"
+				value={current}
+				onValueChange={(next) => {
+					if (isLocale(next) && next !== current) setLocale(next);
+				}}
+				aria-label={m.locale_switcher_label()}
+				spacing={0}
+				className="gap-0"
+			>
+				{locales.map((locale) => (
+					<ToggleGroupItem
+						key={locale}
+						value={locale}
+						className="rounded-full px-3 font-mono text-xs uppercase tracking-widest text-stone-400 hover:bg-transparent hover:text-amber-100 data-[state=on]:bg-lamp data-[state=on]:text-stone-950 aria-pressed:bg-lamp aria-pressed:text-stone-950"
+					>
+						{locale}
+					</ToggleGroupItem>
+				))}
+			</ToggleGroup>
+		</div>
+	);
 }
