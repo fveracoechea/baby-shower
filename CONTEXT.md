@@ -5,20 +5,24 @@ One-off invitation app for one combined baby-shower + gender-reveal event: landi
 ## Language
 
 **Guest**:
-A person who interacts with the invitation page. Identified solely by their name - no accounts, no invite tokens.
+A person the hosts have invited to the event. A Guest uses the phone number on their Invitation to access the invitation page; there are no accounts or invite tokens.
 _Avoid_: user, account, invitee
 
+**Invitation**:
+A host-created record that permits one Guest to submit an RSVP. It contains the Guest's name, normalized phone number, Additional-guest allowance, and RSVP status. A normalized phone number belongs to exactly one Invitation.
+_Avoid_: account, registration, guest record
+
 **RSVP**:
-A guest's single response: attending yes/no plus an optional plus-one. One per guest; editable until the cutoff.
+A Guest's single response: attending yes/no plus the number of Additional guests attending. One per Invitation; editable by the Guest until the Cutoff.
 _Avoid_: signup, registration, booking
 
-**nameKey**:
-The identity key of a guest, derived from their name: trimmed, internal whitespace collapsed to single spaces, Unicode case-folded; accents significant. Unique across RSVPs.
-_Avoid_: username, login
+**Normalized phone number**:
+The lookup identifier for an Invitation. Equivalent US phone-number formats normalize to E.164 (`+1XXXXXXXXXX`) before comparison. It is unique across Invitations.
+_Avoid_: username, login, phone key
 
-**Plus-one**:
-The one extra person a guest may bring. An explicit toggle on the RSVP; naming them is optional. An unnamed plus-one reads "<Guest>'s +1".
-_Avoid_: companion, "+1" as a noun in prose
+**Additional guest**:
+A person who attends with the Guest named on an Invitation. Each Invitation has an Additional-guest allowance from zero through three; an attending Guest chooses any count up to that allowance without naming the Additional guests.
+_Avoid_: Plus-one, companion, "+1" as a noun in prose
 
 **Reveal**:
 The post-confirmation content shown only to attending guests: venue name, address (as a Google Maps link), an embedded Google Map, venue photos, date, start-end time, and the dress code. The public landing shows only the city ("Hoschton, GA") before confirmation.
@@ -29,15 +33,15 @@ Event date minus 7 days, at the end of that calendar day in the event's timezone
 _Avoid_: deadline, lock date
 
 **Retrieval**:
-The "Already confirmed?" path: a guest re-enters their name to re-show their RSVP (and the reveal, if attending). Read-only after the cutoff.
+The "Already confirmed?" path: a Guest re-enters the phone number on their Invitation to re-show their RSVP (and the Reveal, if attending). Read-only after the Cutoff.
 _Avoid_: login, session
 
 **Admin view**:
-The tailnet-gated page at `/admin`: summary strip plus a single newest-first table of RSVPs. Network-level gating only (Caddy tailnet matcher) - no app-level auth. The admin's sole action is deleting a row, behind a confirm.
+The tailnet-gated page at `/admin`: a summary strip plus one table where hosts add, edit, and remove Invitations and see each RSVP status. Network-level gating only (Caddy tailnet matcher) - no app-level auth. Hosts manage RSVP eligibility and Invitation details, but do not change a Guest's response.
 _Avoid_: dashboard, backoffice
 
 **Headcount**:
-The sum of party sizes over attending RSVPs - the number the hosts report to the venue. Declined RSVPs never count.
+The sum of one Guest plus their selected Additional-guest count for every attending RSVP - the number the hosts report to the venue. Declined and Awaiting-response Invitations never count.
 _Avoid_: total guests, attendance figure
 
 **The Mystery**:
