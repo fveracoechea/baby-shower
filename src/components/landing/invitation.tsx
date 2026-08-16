@@ -90,7 +90,7 @@ export function Invitation({ onCta }: { onCta: () => void }) {
 
 				{/* pinned evidence photos */}
 				<div className="relative mx-auto w-full max-w-sm pb-14 pl-4 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 motion-safe:delay-200 motion-safe:fill-mode-backwards motion-safe:duration-500">
-					<figure className="relative z-10 rotate-2 bg-stone-100 p-2 pb-9 shadow-2xl">
+					<figure className="relative z-0 rotate-2 bg-stone-100 p-2 pb-9 shadow-2xl">
 						<div
 							aria-hidden
 							className="absolute -top-2.5 left-1/2 z-10 h-5 w-20 -translate-x-1/2 -rotate-2 bg-lamp/80"
@@ -112,7 +112,7 @@ export function Invitation({ onCta }: { onCta: () => void }) {
 							{m.event_parents()}
 						</figcaption>
 					</figure>
-					<figure className="absolute right-0 bottom-5 w-52 rotate-6 bg-stone-100 p-1.5 shadow-xl sm:w-60">
+					<figure className="absolute right-0 bottom-5 z-10 w-52 rotate-6 bg-stone-100 p-1.5 shadow-xl sm:w-60">
 						<img
 							src="/assets/secondary-landscape-512.webp"
 							srcSet="/assets/secondary-landscape-512.webp 512w, /assets/secondary-landscape-1024.webp 1024w"
@@ -123,7 +123,7 @@ export function Invitation({ onCta }: { onCta: () => void }) {
 							className="w-full grayscale contrast-125"
 						/>
 					</figure>
-					<figure className="absolute -bottom-2 -left-2 w-40 -rotate-6 bg-stone-100 p-1.5 pb-7 shadow-xl sm:w-48">
+					<figure className="absolute -bottom-2 -left-2 z-10 w-40 -rotate-6 bg-stone-100 p-1.5 pb-7 shadow-xl sm:w-48">
 						<div
 							aria-hidden
 							className="absolute -top-2 left-1/2 z-10 h-4 w-14 -translate-x-1/2 rotate-2 bg-lamp/80"
