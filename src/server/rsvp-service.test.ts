@@ -83,6 +83,31 @@ describe("Guest RSVP server functions", () => {
 		});
 	});
 
+	it("retrieves an Invitation with an international phone number", async () => {
+		const internationalInvitation = {
+			...invitation,
+			phoneNumber: "+525512345678",
+		};
+		const service = createRsvpService({
+			now: () => new Date("2026-10-03T23:00:00-04:00"),
+			findInvitation: async (phoneNumber) =>
+				phoneNumber === internationalInvitation.phoneNumber
+					? internationalInvitation
+					: undefined,
+			findRsvp: async () => undefined,
+			createRsvp: async () => {
+				throw new Error("Not used");
+			},
+			updateRsvp: async () => {
+				throw new Error("Not used");
+			},
+		});
+
+		await expect(
+			service.retrieve({ phoneNumber: "+52 55 1234 5678" }),
+		).resolves.toMatchObject({ status: "awaiting" });
+	});
+
 	it("keeps Retrieval available but makes it read-only after the Cutoff", async () => {
 		const state: TestState = {};
 		const beforeCutoff = serviceAt("2026-10-03T23:00:00-04:00", state);

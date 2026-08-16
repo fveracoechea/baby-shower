@@ -147,7 +147,7 @@ export function InvitationManager({
 						{editing === null ? "Add Invitation" : "Edit Invitation"}
 					</h2>
 					<p className="mt-1 text-xs leading-5 text-stone-400">
-						Phone numbers are stored in normalized US format.
+						Include the country code for international phone numbers.
 					</p>
 					<fieldset disabled={saving} className="mt-5 grid gap-4">
 						<Field

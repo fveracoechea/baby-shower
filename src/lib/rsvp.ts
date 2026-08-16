@@ -3,7 +3,7 @@ import { z } from "zod";
 const phoneNumber = z
 	.string()
 	.trim()
-	.min(7, "Enter a US phone number")
+	.min(1, "Enter a phone number")
 	.max(30, "Phone number is too long");
 
 export const rsvpInputSchema = z.object({

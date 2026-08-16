@@ -1,12 +1,9 @@
-/** Converts a US phone number to the Invitation lookup form, or rejects it. */
-export function normalizeUsPhoneNumber(value: string): string | null {
+/** Removes display formatting and produces the Invitation lookup form. */
+export function normalizePhoneNumber(value: string): string | null {
 	const digits = value.replace(/\D/g, "");
-	const nationalNumber =
-		digits.length === 11 && digits.startsWith("1") ? digits.slice(1) : digits;
+	if (!digits) return null;
 
-	if (nationalNumber.length !== 10 || /^[01]/.test(nationalNumber)) {
-		return null;
-	}
-
-	return `+1${nationalNumber}`;
+	const hasExplicitCountryCode = value.trimStart().startsWith("+");
+	if (!hasExplicitCountryCode && digits.length === 10) return `+1${digits}`;
+	return `+${digits}`;
 }

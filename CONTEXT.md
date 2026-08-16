@@ -17,7 +17,7 @@ A Guest's single response: attending yes/no plus the number of Additional guests
 _Avoid_: signup, registration, booking
 
 **Normalized phone number**:
-The lookup identifier for an Invitation. Equivalent US phone-number formats normalize to E.164 (`+1XXXXXXXXXX`) before comparison. It is unique across Invitations.
+The lookup identifier for an Invitation. Display punctuation and spacing are removed before comparison, and US numbers without a country code keep `+1` compatibility. International numbers include their country code. It is unique across Invitations.
 _Avoid_: username, login, phone key
 
 **Additional guest**:

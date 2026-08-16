@@ -1,7 +1,7 @@
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 
-import { normalizeUsPhoneNumber } from "#/lib/phone";
+import { normalizePhoneNumber } from "#/lib/phone";
 import type { GuestRsvpInput, RsvpDto } from "#/lib/rsvp";
 import {
 	lookupRememberedRsvp,
@@ -50,7 +50,7 @@ export function useRsvpFlow() {
 		setInvitation(null);
 		setRsvp(null);
 		setReadOnly(false);
-		if (!normalizeUsPhoneNumber(phoneNumber)) {
+		if (!normalizePhoneNumber(phoneNumber)) {
 			setError("invalid-phone");
 			return false;
 		}

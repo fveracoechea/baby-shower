@@ -1,4 +1,4 @@
-import { normalizeUsPhoneNumber } from "#/lib/phone";
+import { normalizePhoneNumber } from "#/lib/phone";
 
 export const RSVP_CUTOFF = new Date("2026-10-04T03:59:59.999Z");
 
@@ -59,7 +59,7 @@ function toGuestRsvp(invitation: Invitation, rsvp: StoredRsvp): GuestRsvp {
 
 export function createRsvpService(repository: Repository & { now(): Date }) {
 	async function invitationFor(phoneNumber: string) {
-		const normalizedPhoneNumber = normalizeUsPhoneNumber(phoneNumber);
+		const normalizedPhoneNumber = normalizePhoneNumber(phoneNumber);
 		if (!normalizedPhoneNumber) return undefined;
 		return repository.findInvitation(normalizedPhoneNumber);
 	}

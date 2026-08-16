@@ -4,18 +4,18 @@ import { z } from "zod";
 
 import { db } from "#/db";
 import { invitations, rsvps } from "#/db/schema";
-import { normalizeUsPhoneNumber } from "#/lib/phone";
+import { normalizePhoneNumber } from "#/lib/phone";
 import { adminAuthMiddleware } from "#/server/admin-auth";
 
 const phoneNumberSchema = z
 	.string()
 	.trim()
 	.transform((value, context) => {
-		const normalizedPhoneNumber = normalizeUsPhoneNumber(value);
+		const normalizedPhoneNumber = normalizePhoneNumber(value);
 		if (!normalizedPhoneNumber) {
 			context.addIssue({
 				code: "custom",
-				message: "Enter a valid US phone number",
+				message: "Enter a phone number",
 			});
 			return z.NEVER;
 		}
@@ -161,39 +161,48 @@ export const addInvitation = createServerFn({ method: "POST" })
 		return invitation;
 	});
 
+export async function editInvitationRecord(
+	data: z.infer<typeof editInvitationInputSchema>,
+	database: typeof db = db,
+) {
+	return database.transaction((tx) => {
+		const [rsvp] = tx
+			.select({
+				additionalGuestCount: rsvps.additionalGuestCount,
+				attending: rsvps.attending,
+			})
+			.from(rsvps)
+			.where(eq(rsvps.invitationId, data.id))
+			.all();
+		const additionalGuestsAttending = rsvp?.attending
+			? rsvp.additionalGuestCount
+			: 0;
+		if (data.additionalGuestAllowance < additionalGuestsAttending) {
+			throw new Error(
+				"Allowance cannot be below the confirmed Additional-guest count.",
+			);
+		}
+		const [invitation] = tx
+			.update(invitations)
+			.set({
+				guestName: cleanName(data.name),
+				phoneNumber: data.phoneNumber,
+				additionalGuestAllowance: data.additionalGuestAllowance,
+			})
+			.where(eq(invitations.id, data.id))
+			.returning()
+			.all();
+		if (!invitation) throw new Error("Invitation not found.");
+		return invitation;
+	});
+}
+
 export const editInvitation = createServerFn({ method: "POST" })
 	.middleware([adminAuthMiddleware])
 	.validator(editInvitationInputSchema)
 	.handler(async ({ data }) => {
 		await requireUniquePhoneNumber(data.phoneNumber, data.id);
-		return db.transaction(async (tx) => {
-			const [rsvp] = await tx
-				.select({
-					additionalGuestCount: rsvps.additionalGuestCount,
-					attending: rsvps.attending,
-				})
-				.from(rsvps)
-				.where(eq(rsvps.invitationId, data.id));
-			const additionalGuestsAttending = rsvp?.attending
-				? rsvp.additionalGuestCount
-				: 0;
-			if (data.additionalGuestAllowance < additionalGuestsAttending) {
-				throw new Error(
-					"Allowance cannot be below the confirmed Additional-guest count.",
-				);
-			}
-			const [invitation] = await tx
-				.update(invitations)
-				.set({
-					guestName: cleanName(data.name),
-					phoneNumber: data.phoneNumber,
-					additionalGuestAllowance: data.additionalGuestAllowance,
-				})
-				.where(eq(invitations.id, data.id))
-				.returning();
-			if (!invitation) throw new Error("Invitation not found.");
-			return invitation;
-		});
+		return editInvitationRecord(data);
 	});
 
 export const removeInvitation = createServerFn({ method: "POST" })
