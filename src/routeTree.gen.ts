@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as RevealRouteImport } from './routes/reveal'
+import { Route as RsvpRouteImport } from './routes/rsvp'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const RevealRoute = RevealRouteImport.update({
   path: '/reveal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RsvpRoute = RsvpRouteImport.update({
+  id: '/rsvp',
+  path: '/rsvp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin_/login',
   path: '/admin/login',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/reveal': typeof RevealRoute
+  '/rsvp': typeof RsvpRoute
   '/admin/login': typeof AdminLoginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/reveal': typeof RevealRoute
+  '/rsvp': typeof RsvpRoute
   '/admin/login': typeof AdminLoginRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/reveal': typeof RevealRoute
+  '/rsvp': typeof RsvpRoute
   '/admin_/login': typeof AdminLoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/reveal' | '/admin/login'
+  fullPaths: '/' | '/admin' | '/reveal' | '/rsvp' | '/admin/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/reveal' | '/admin/login'
-  id: '__root__' | '/' | '/admin' | '/reveal' | '/admin_/login'
+  to: '/' | '/admin' | '/reveal' | '/rsvp' | '/admin/login'
+  id: '__root__' | '/' | '/admin' | '/reveal' | '/rsvp' | '/admin_/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   RevealRoute: typeof RevealRoute
+  RsvpRoute: typeof RsvpRoute
   AdminLoginRoute: typeof AdminLoginRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RevealRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rsvp': {
+      id: '/rsvp'
+      path: '/rsvp'
+      fullPath: '/rsvp'
+      preLoaderRoute: typeof RsvpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/login': {
       id: '/admin_/login'
       path: '/admin/login'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   RevealRoute: RevealRoute,
+  RsvpRoute: RsvpRoute,
   AdminLoginRoute: AdminLoginRoute,
 }
 export const routeTree = rootRouteImport

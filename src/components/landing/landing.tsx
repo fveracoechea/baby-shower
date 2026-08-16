@@ -1,23 +1,32 @@
 import { useCallback, useEffect, useState } from "react";
-import LocaleSwitcher from "#/components/LocaleSwitcher";
+import { GuestNavigation } from "#/components/GuestNavigation";
 import { LAMP_GLOW } from "#/components/landing/case-ui";
 import { EnvelopeIntro } from "#/components/landing/envelope-intro";
 import { Invitation, Witnesses } from "#/components/landing/invitation";
-import { RsvpSection } from "#/components/landing/rsvp-section";
 import { StoryReel } from "#/components/landing/story-reel";
-import { Button } from "#/components/ui/button";
-import { m } from "#/paraglide/messages";
 
 type Stage = "envelope" | "story" | "invite";
+export type LandingView = "case" | "invitation";
 
 /**
  * The Detective's Desk: the Secret Envelope opens on load, the story
  * plays as auto-advancing scenes, and the guest lands on the invitation
- * with the RSVP typed onto the case file.
+ * and then lands the Guest on the Invitation.
  */
-export function Landing({ editRsvp = false }: { editRsvp?: boolean }) {
-	const [stage, setStage] = useState<Stage>(editRsvp ? "invite" : "envelope");
+export function Landing({ view = "case" }: { view?: LandingView }) {
+	const [stage, setStage] = useState<Stage>(
+		view === "invitation" ? "invite" : "envelope",
+	);
 	const [envelopeStep, setEnvelopeStep] = useState(0);
+
+	useEffect(() => {
+		if (view === "invitation") {
+			setStage("invite");
+			return;
+		}
+		setEnvelopeStep(0);
+		setStage("envelope");
+	}, [view]);
 
 	// The envelope opens on load, then falls away into the case file.
 	useEffect(() => {
@@ -34,23 +43,6 @@ export function Landing({ editRsvp = false }: { editRsvp?: boolean }) {
 
 	const completeStory = useCallback(() => setStage("invite"), []);
 
-	function scrollToRsvp() {
-		const target = document.getElementById("rsvp");
-		if (!target) return;
-		const reduced = window.matchMedia(
-			"(prefers-reduced-motion: reduce)",
-		).matches;
-		target.scrollIntoView({
-			behavior: reduced ? "auto" : "smooth",
-			block: "start",
-		});
-	}
-
-	function skipToRsvp() {
-		setStage("invite");
-		window.setTimeout(scrollToRsvp, 80);
-	}
-
 	return (
 		<main className="relative min-h-svh overflow-x-clip">
 			<div aria-hidden className={LAMP_GLOW} />
@@ -59,28 +51,22 @@ export function Landing({ editRsvp = false }: { editRsvp?: boolean }) {
 				className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.55))]"
 			/>
 
-			<nav className="pointer-events-none fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-4 p-4">
-				<LocaleSwitcher />
-				{stage !== "invite" ? (
-					<Button
-						type="button"
-						variant="outline"
-						onClick={skipToRsvp}
-						className="pointer-events-auto h-8 rounded-md border-stone-700 bg-stone-900/80 px-3 font-mono text-[10px] uppercase tracking-[0.16em] text-stone-300 hover:bg-stone-800 hover:text-amber-100"
-					>
-						{m.story_skip()}
-					</Button>
-				) : null}
-			</nav>
+			<GuestNavigation
+				active={stage === "invite" ? "invitation" : "case"}
+				onCase={() => {
+					setEnvelopeStep(0);
+					setStage("envelope");
+				}}
+				onInvitation={() => setStage("invite")}
+			/>
 
 			{stage === "envelope" ? <EnvelopeIntro step={envelopeStep} /> : null}
 
 			{stage === "story" ? <StoryReel onComplete={completeStory} /> : null}
 
 			{stage === "invite" ? (
-				<div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-16 px-4 py-16 sm:py-24">
-					<Invitation onCta={scrollToRsvp} />
-					<RsvpSection editRsvp={editRsvp} />
+				<div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-16 px-4 pt-20 pb-16 sm:py-24">
+					<Invitation />
 					<Witnesses />
 				</div>
 			) : null}

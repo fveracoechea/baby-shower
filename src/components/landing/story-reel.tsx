@@ -1,7 +1,6 @@
 import { ChevronLeft, ChevronRight, FolderOpen } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { MANILA_CARD, PRIMARY_BUTTON } from "#/components/landing/case-ui";
 import { Button } from "#/components/ui/button";
 import {
 	Card,
@@ -85,7 +84,7 @@ export function StoryReel({ onComplete }: { onComplete: () => void }) {
 			<div className="flex w-full items-end justify-between gap-2">
 				<div className="flex items-end gap-1">
 					{beats.map((storyBeat, beatIndex) => (
-						<button
+						<Button
 							key={storyBeat.kicker}
 							type="button"
 							onClick={() => {
@@ -99,21 +98,20 @@ export function StoryReel({ onComplete }: { onComplete: () => void }) {
 								number: beatIndex + 1,
 								title: storyBeat.title,
 							})}
-							className={`rounded-t-md border border-stone-700 px-3 py-1.5 font-mono text-[11px] tracking-widest transition-colors focus-visible:outline-2 focus-visible:outline-lamp-deep ${
-								beatIndex === index
-									? "bg-case-paper text-case-ink"
-									: "bg-stone-900 text-stone-300 hover:bg-stone-800 hover:text-amber-100"
-							}`}
+							variant="folder"
+							size="sm"
+							className="px-3"
 						>
 							{String(beatIndex + 1).padStart(2, "0")}
-						</button>
+						</Button>
 					))}
 				</div>
 			</div>
 
 			<Card
 				key={index}
-				className={`w-full ${MANILA_CARD} motion-safe:transition-opacity motion-safe:duration-150 ${fadingOut ? "motion-safe:opacity-0" : "motion-safe:animate-in motion-safe:fade-in motion-safe:duration-150"}`}
+				variant="manila"
+				className={`w-full motion-safe:transition-opacity motion-safe:duration-150 ${fadingOut ? "motion-safe:opacity-0" : "motion-safe:duration-150"}`}
 			>
 				<CardHeader>
 					<div className="flex items-center gap-2 font-mono text-sm leading-relaxed text-stone-500">
@@ -123,12 +121,8 @@ export function StoryReel({ onComplete }: { onComplete: () => void }) {
 					<p className="font-mono text-xs leading-relaxed text-stone-500">
 						{m.story_sealed_note()}
 					</p>
-					<CardTitle className="display-title text-3xl text-case-ink sm:text-4xl">
-						{beat.title}
-					</CardTitle>
-					<CardDescription className="max-w-prose font-mono text-sm leading-relaxed text-stone-700">
-						{beat.body}
-					</CardDescription>
+					<CardTitle className="sm:text-4xl">{beat.title}</CardTitle>
+					<CardDescription className="max-w-prose">{beat.body}</CardDescription>
 				</CardHeader>
 				<CardContent className="flex items-end justify-between gap-4">
 					{showSecondaryPhoto ? (
@@ -172,12 +166,11 @@ export function StoryReel({ onComplete }: { onComplete: () => void }) {
 				<CardFooter className="justify-between gap-3">
 					<Button
 						type="button"
-						variant="outline"
+						variant="case-outline"
 						size="icon-sm"
 						onClick={() => setPendingIndex(index - 1)}
 						disabled={index === 0 || fadingOut}
 						aria-label={m.story_previous()}
-						className="rounded-md border-stone-900/30 bg-transparent text-case-ink hover:bg-amber-200/70 hover:text-case-ink"
 					>
 						<ChevronLeft aria-hidden />
 					</Button>
@@ -185,22 +178,21 @@ export function StoryReel({ onComplete }: { onComplete: () => void }) {
 						<Button
 							type="button"
 							size="sm"
+							variant="case"
 							onClick={() => setFinishing(true)}
 							disabled={fadingOut}
-							className={`${PRIMARY_BUTTON} h-8 px-2.5 text-[10px] tracking-[0.12em]`}
+							className="text-[10px] tracking-[0.12em]"
 						>
 							{m.story_continue()}
-							<ChevronRight aria-hidden />
 						</Button>
 					) : (
 						<Button
 							type="button"
-							variant="outline"
+							variant="case-outline"
 							size="icon-sm"
 							onClick={() => setPendingIndex(index + 1)}
 							disabled={fadingOut}
 							aria-label={m.story_next()}
-							className="rounded-md border-stone-900/30 bg-transparent text-case-ink hover:bg-amber-200/70 hover:text-case-ink"
 						>
 							<ChevronRight aria-hidden />
 						</Button>

@@ -26,11 +26,12 @@ This is the exact content the build hardcodes, organized for the hand-rolled dic
 2. **Reveal gains an embedded Google Map** (no-key `output=embed` iframe, `loading="lazy"`, `referrerpolicy="no-referrer-when-downgrade"`, `allowfullscreen`). The address-as-Maps-link stays as caption/fallback under the embed. **Amends #2** ("No embedded map iframe").
 3. **Reveal gains the dress code**: casual; wear the color of your theory (pink/rose = girl, green/blue = boy, white/yellow = neutral).
 4. **Reveal gains two venue photos**: `venue-exterior.jpg`, `venue-interior.jpg` (pulled from the Google Maps place gallery into `apps/baby-shower/assets/`).
-5. **No gift notes, no registry link, no separate dress code on landing.**
+5. **Landing shows the dress code, gift note, and registry link.** The Reveal repeats this information after an RSVP.
 6. **Parents-to-be are named** in copy: "Nancy & Francisco". Case number stays generic ("Case No. 2026").
 7. **Locale strategy**: URL prefix. EN at `/`, ES at `/es/*`. Detection order path > cookie > Accept-Language header; **fallback EN**. The toggle is a plain link to the same page in the other locale. Supersedes the scaffold's `?lang=` links and ES fallback.
 8. **Content module**: single typed module. Extend the existing `src/lib/i18n.ts` (flat camelCase keys, `Messages = typeof en`, ES satisfies the type, compile-time key parity test already exists). Event facts above go in a sibling `src/lib/event.ts`. Components never hardcode strings.
 9. **Scaffold deltas for the build**: flip `Messages = typeof es` to `typeof en`; flip `asLanguage`/`fallbackLanguage` to EN; replace `?lang=` toggle with path-prefix links; replace the 17 scaffold keys with the deck below.
+10. **RSVP is a dedicated mobile-first page at `/rsvp`.** The main phone lookup handles both new responses and Retrieval. A declined Guest sees only the declined message and an option to edit their RSVP; the Reveal remains hidden.
 
 ## Photo manifest
 
@@ -89,7 +90,7 @@ This is the exact content the build hardcodes, organized for the hand-rolled dic
 | `cta`                         | RSVP                                                                            | Confirmar asistencia                                                                     |
 | `alreadyLink`                 | Already confirmed?                                                              | ¿Ya confirmaste?                                                                         |
 
-### RSVP form
+### RSVP page (`/rsvp`)
 
 | key                        | EN                                                                             | ES                                                                       |
 | -------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |

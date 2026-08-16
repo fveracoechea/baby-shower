@@ -1,6 +1,7 @@
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 
+import { normalizeUsPhoneNumber } from "#/lib/phone";
 import type { GuestRsvpInput, RsvpDto } from "#/lib/rsvp";
 import {
 	lookupRememberedRsvp,
@@ -14,13 +15,24 @@ export type FlowPhase =
 	| "submitting"
 	| "confirmed"
 	| "declined"
-	| "already-confirmed"
 	| "closed";
 
 type Invitation = Pick<
 	RsvpDto,
 	"name" | "phoneNumber" | "additionalGuestAllowance"
 >;
+
+export type RsvpFlowError =
+	| "invalid-phone"
+	| "not-found"
+	| "rate-limited"
+	| "generic";
+
+function errorCode(exception: unknown): RsvpFlowError {
+	return exception instanceof Error && exception.message.includes("Too many")
+		? "rate-limited"
+		: "generic";
+}
 
 export function useRsvpFlow() {
 	const submitFn = useServerFn(submitRsvp);
@@ -30,12 +42,19 @@ export function useRsvpFlow() {
 	const [phase, setPhase] = useState<FlowPhase>("idle");
 	const [rsvp, setRsvp] = useState<RsvpDto | null>(null);
 	const [invitation, setInvitation] = useState<Invitation | null>(null);
-	const [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<RsvpFlowError | null>(null);
 	const [readOnly, setReadOnly] = useState(false);
 
 	async function identify(phoneNumber: string) {
-		setPhase("submitting");
 		setError(null);
+		setInvitation(null);
+		setRsvp(null);
+		setReadOnly(false);
+		if (!normalizeUsPhoneNumber(phoneNumber)) {
+			setError("invalid-phone");
+			return false;
+		}
+		setPhase("submitting");
 		try {
 			const result = await lookupFn({ data: { phoneNumber } });
 			if (result.status === "awaiting") {
@@ -48,22 +67,14 @@ export function useRsvpFlow() {
 				setRsvp(result.rsvp);
 				setInvitation(result.rsvp);
 				setReadOnly(result.readOnly);
-				setPhase(
-					result.readOnly
-						? result.rsvp.attending
-							? "confirmed"
-							: "declined"
-						: "already-confirmed",
-				);
+				setPhase(result.rsvp.attending ? "confirmed" : "declined");
 				return true;
 			}
 			setError("not-found");
 			setPhase("idle");
 			return false;
 		} catch (exception) {
-			setError(
-				exception instanceof Error ? exception.message : "Something went wrong",
-			);
+			setError(errorCode(exception));
 			setPhase("idle");
 			return false;
 		}
@@ -88,17 +99,9 @@ export function useRsvpFlow() {
 			}
 			setRsvp(result.rsvp);
 			setInvitation(result.rsvp);
-			setPhase(
-				result.status === "existing"
-					? "already-confirmed"
-					: result.rsvp.attending
-						? "confirmed"
-						: "declined",
-			);
+			setPhase(result.rsvp.attending ? "confirmed" : "declined");
 		} catch (exception) {
-			setError(
-				exception instanceof Error ? exception.message : "Something went wrong",
-			);
+			setError(errorCode(exception));
 			setPhase("idle");
 		}
 	}
@@ -118,9 +121,7 @@ export function useRsvpFlow() {
 			setReadOnly(result.readOnly);
 			setPhase(result.readOnly ? "confirmed" : "idle");
 		} catch (exception) {
-			setError(
-				exception instanceof Error ? exception.message : "Something went wrong",
-			);
+			setError(errorCode(exception));
 			setPhase("idle");
 		}
 	}
@@ -131,6 +132,7 @@ export function useRsvpFlow() {
 		invitation,
 		error,
 		readOnly,
+		clearError: () => setError(null),
 		identify,
 		submit: (input: GuestRsvpInput) => write(input, false),
 		update: (input: GuestRsvpInput) => write(input, true),

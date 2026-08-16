@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import {
 	Calendar,
 	ClipboardList,
@@ -7,11 +8,8 @@ import {
 	Stethoscope,
 } from "lucide-react";
 
-import {
-	FactItem,
-	MANILA_CARD,
-	PRIMARY_BUTTON,
-} from "#/components/landing/case-ui";
+import { FactItem } from "#/components/landing/case-ui";
+import { EventNotes } from "#/components/landing/event-notes";
 import { Button } from "#/components/ui/button";
 import {
 	Card,
@@ -42,21 +40,19 @@ const WITNESSES = [
  * The invitation overview: the case file with the event facts (city only)
  * and pinned evidence photos. The CTA scrolls to the RSVP.
  */
-export function Invitation({ onCta }: { onCta: () => void }) {
+export function Invitation() {
 	return (
 		<section className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
-			<Card
-				className={`${MANILA_CARD} motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 motion-safe:fill-mode-backwards motion-safe:duration-500`}
-			>
+			<Card variant="manila">
 				<CardHeader>
 					<div className="flex items-center gap-2 font-mono text-sm leading-relaxed text-stone-500">
 						<FolderOpen className="size-3.5" aria-hidden />
 						{m.envelope_case_number()}
 					</div>
-					<CardTitle className="display-title text-4xl text-case-ink sm:text-5xl">
+					<CardTitle className="text-4xl sm:text-5xl">
 						{m.beat2_title()}
 					</CardTitle>
-					<CardDescription className="max-w-prose font-mono text-sm leading-relaxed text-stone-700">
+					<CardDescription className="max-w-prose">
 						{m.beat4_body()}
 					</CardDescription>
 				</CardHeader>
@@ -66,13 +62,14 @@ export function Invitation({ onCta }: { onCta: () => void }) {
 						<FactItem icon={Clock3}>{m.event_time()}</FactItem>
 						<FactItem icon={MapPin}>{m.event_city()}</FactItem>
 					</ul>
+					<EventNotes stacked />
 					<p className="font-mono text-sm leading-relaxed text-stone-500">
 						{m.invite_sealed_note()}
 					</p>
 				</CardContent>
 				<CardFooter>
-					<Button type="button" onClick={onCta} className={PRIMARY_BUTTON}>
-						{m.rsvp_title()}
+					<Button asChild variant="case">
+						<Link to="/rsvp">{m.rsvp_title()}</Link>
 					</Button>
 				</CardFooter>
 			</Card>

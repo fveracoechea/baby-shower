@@ -1,5 +1,6 @@
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
+import { MusicPlayer } from "#/components/MusicPlayer";
 import { getLocale } from "#/paraglide/runtime";
 
 import appCss from "../styles.css?url";
@@ -44,6 +45,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body>
 				{children}
+				<MusicPlayer />
 				<Scripts />
 			</body>
 		</html>

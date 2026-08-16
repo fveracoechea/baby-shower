@@ -1,12 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Landing } from "#/components/landing/landing";
+import { Landing, type LandingView } from "#/components/landing/landing";
 import { m } from "#/paraglide/messages";
 import { paraglideRequestMiddleware } from "#/server/locale";
 
 export const Route = createFileRoute("/")({
-	validateSearch: (search): { edit?: "rsvp" } => ({
-		edit: search.edit === "rsvp" ? "rsvp" : undefined,
+	validateSearch: (search): { view?: LandingView } => ({
+		view:
+			search.view === "case" || search.view === "invitation"
+				? search.view
+				: undefined,
 	}),
 	server: {
 		middleware: [paraglideRequestMiddleware],
@@ -42,6 +45,6 @@ export const Route = createFileRoute("/")({
 });
 
 function InvitationPage() {
-	const { edit } = Route.useSearch();
-	return <Landing editRsvp={edit === "rsvp"} />;
+	const { view } = Route.useSearch();
+	return <Landing view={view} />;
 }

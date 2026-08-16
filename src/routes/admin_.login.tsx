@@ -2,7 +2,7 @@ import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { type FormEvent, useState } from "react";
 
-import { LAMP_GLOW, PRIMARY_BUTTON } from "#/components/landing/case-ui";
+import { LAMP_GLOW } from "#/components/landing/case-ui";
 import { Button } from "#/components/ui/button";
 import {
 	Card,
@@ -47,12 +47,10 @@ function AdminLoginPage() {
 	return (
 		<main className="relative grid min-h-svh place-items-center overflow-hidden px-4 py-16">
 			<div aria-hidden className={LAMP_GLOW} />
-			<Card className="relative z-10 w-full max-w-md rounded-md border-lamp/30 bg-stone-900 text-case-paper shadow-2xl">
+			<Card className="relative z-10 w-full max-w-md">
 				<CardHeader>
-					<CardTitle className="display-title text-3xl text-case-paper">
-						Admin access
-					</CardTitle>
-					<CardDescription className="text-stone-400">
+					<CardTitle>Admin access</CardTitle>
+					<CardDescription>
 						Enter the host password to open the Invitation ledger.
 					</CardDescription>
 				</CardHeader>
@@ -72,11 +70,7 @@ function AdminLoginPage() {
 								{error}
 							</p>
 						) : null}
-						<Button
-							type="submit"
-							className={PRIMARY_BUTTON}
-							disabled={submitting}
-						>
+						<Button type="submit" disabled={submitting}>
 							{submitting ? "Signing in..." : "Sign in"}
 						</Button>
 					</form>

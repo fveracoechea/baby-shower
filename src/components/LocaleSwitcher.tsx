@@ -7,8 +7,10 @@ export default function LocaleSwitcher() {
 	const current = getLocale();
 
 	return (
-		<div className="pointer-events-auto rounded-md border border-stone-700 bg-stone-950/85 p-0.5 shadow-lg backdrop-blur-sm">
+		<div className="pointer-events-auto rounded-md border border-stone-700 bg-stone-950/85 shadow-lg backdrop-blur-sm">
 			<ToggleGroup
+				size="sm"
+				variant="nav"
 				type="single"
 				value={current}
 				onValueChange={(next) => {
@@ -19,11 +21,7 @@ export default function LocaleSwitcher() {
 				className="gap-0"
 			>
 				{locales.map((locale) => (
-					<ToggleGroupItem
-						key={locale}
-						value={locale}
-						className="h-6 rounded-[3px] px-2 font-mono text-[10px] uppercase tracking-wider text-stone-400 hover:bg-transparent hover:text-amber-100 data-[state=on]:bg-lamp data-[state=on]:text-stone-950 aria-pressed:bg-lamp aria-pressed:text-stone-950"
-					>
+					<ToggleGroupItem key={locale} value={locale} className="min-w-0 px-2">
 						{locale}
 					</ToggleGroupItem>
 				))}

@@ -1,5 +1,11 @@
 import { type FormEvent, useState } from "react";
 
+import { Badge } from "#/components/ui/badge";
+import { Button } from "#/components/ui/button";
+import { Card } from "#/components/ui/card";
+import { Input } from "#/components/ui/input";
+import { Label } from "#/components/ui/label";
+import { Select } from "#/components/ui/select";
 import type { AdminView, InvitationStatus } from "#/server/admin";
 
 type InvitationInput = {
@@ -97,15 +103,16 @@ export function InvitationManager({
 	}
 
 	return (
-		<main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+		<main className="mx-auto w-full max-w-6xl px-4 py-8 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 motion-safe:fill-mode-backwards motion-safe:duration-500 sm:px-6 sm:py-12">
 			<header className="relative border-b border-lamp/30 pb-6 pr-24">
-				<button
+				<Button
 					type="button"
+					variant="text"
 					onClick={onLogout}
-					className="absolute top-0 right-0 font-mono text-xs uppercase tracking-widest text-stone-400 underline underline-offset-4 hover:text-lamp"
+					className="absolute top-0 right-0 font-mono text-xs uppercase tracking-widest text-stone-400 underline underline-offset-4"
 				>
 					Sign out
-				</button>
+				</Button>
 				<p className="typewriter text-xs uppercase tracking-[0.28em] text-lamp">
 					Case file 19
 				</p>
@@ -156,9 +163,9 @@ export function InvitationManager({
 							autoComplete="tel"
 							type="tel"
 						/>
-						<label className="grid gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-stone-300">
+						<Label variant="field" className="grid gap-1.5">
 							Additional-guest allowance
-							<select
+							<Select
 								value={form.additionalGuestAllowance}
 								onChange={(event) =>
 									setForm({
@@ -166,15 +173,14 @@ export function InvitationManager({
 										additionalGuestAllowance: Number(event.target.value),
 									})
 								}
-								className="h-11 border border-stone-600 bg-stone-950 px-3 font-mono text-sm text-case-paper focus:border-lamp focus:outline-none"
 							>
 								{[0, 1, 2, 3].map((value) => (
 									<option key={value} value={value}>
 										{value}
 									</option>
 								))}
-							</select>
-						</label>
+							</Select>
+						</Label>
 					</fieldset>
 					{editing !== null &&
 					view.invitations.find((invitation) => invitation.id === editing)
@@ -189,24 +195,22 @@ export function InvitationManager({
 						</p>
 					) : null}
 					<div className="mt-5 flex flex-wrap gap-3">
-						<button
-							type="submit"
-							className="bg-lamp px-4 py-2.5 text-sm font-bold text-case-ink hover:bg-lamp-deep disabled:opacity-50"
-						>
+						<Button type="submit" size="lg">
 							{saving
 								? "Saving..."
 								: editing === null
 									? "Add Invitation"
 									: "Save changes"}
-						</button>
+						</Button>
 						{editing !== null ? (
-							<button
+							<Button
 								type="button"
+								variant="outline"
+								size="lg"
 								onClick={cancelEdit}
-								className="border border-stone-600 px-4 py-2.5 text-sm text-stone-200 hover:border-lamp"
 							>
 								Cancel
-							</button>
+							</Button>
 						) : null}
 					</div>
 				</form>
@@ -262,21 +266,23 @@ export function InvitationManager({
 										</td>
 										<td className="p-3">
 											<div className="flex gap-2">
-												<button
+												<Button
 													type="button"
+													variant="text"
 													onClick={() => startEdit(invitation)}
-													className="text-xs font-bold text-lamp hover:text-lamp-deep"
+													className="text-xs"
 												>
 													Edit
-												</button>
-												<button
+												</Button>
+												<Button
 													type="button"
+													variant="dangerText"
 													onClick={() => setRemoving(invitation)}
 													aria-label={`Remove ${invitation.name}`}
-													className="text-xs font-bold text-red-300 hover:text-red-200"
+													className="text-xs"
 												>
 													Remove
-												</button>
+												</Button>
 											</div>
 										</td>
 									</tr>
@@ -294,7 +300,7 @@ export function InvitationManager({
 					aria-labelledby="remove-title"
 					className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4"
 				>
-					<div className="w-full max-w-md border border-stamp bg-stone-950 p-6 shadow-[10px_10px_0_rgba(185,28,28,0.35)]">
+					<Card variant="destructive" className="w-full max-w-md p-6">
 						<h2
 							id="remove-title"
 							className="display-title text-2xl text-case-paper"
@@ -309,24 +315,26 @@ export function InvitationManager({
 							This cannot be undone.
 						</p>
 						<div className="mt-6 flex flex-wrap gap-3">
-							<button
+							<Button
 								type="button"
+								variant="destructive"
+								size="lg"
 								disabled={saving}
 								onClick={confirmRemoval}
-								className="bg-stamp px-4 py-2.5 text-sm font-bold text-white disabled:opacity-50"
 							>
 								Remove Invitation
-							</button>
-							<button
+							</Button>
+							<Button
 								type="button"
+								variant="outline"
+								size="lg"
 								disabled={saving}
 								onClick={() => setRemoving(null)}
-								className="border border-stone-600 px-4 py-2.5 text-sm text-stone-200"
 							>
 								Cancel
-							</button>
+							</Button>
 						</div>
-					</div>
+					</Card>
 				</div>
 			) : null}
 		</main>
@@ -347,17 +355,16 @@ function Field({
 	type?: "text" | "tel";
 }) {
 	return (
-		<label className="grid gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-stone-300">
+		<Label variant="field" className="grid gap-1.5">
 			{label}
-			<input
+			<Input
 				required
 				type={type}
 				value={value}
 				onChange={(event) => onChange(event.target.value)}
 				autoComplete={autoComplete}
-				className="h-11 border border-stone-600 bg-stone-950 px-3 text-sm text-case-paper focus:border-lamp focus:outline-none"
 			/>
-		</label>
+		</Label>
 	);
 }
 
@@ -373,15 +380,11 @@ function Summary({ label, value }: { label: string; value: number }) {
 }
 
 function Status({ status }: { status: InvitationStatus }) {
-	const color =
+	const variant =
 		status === "attending"
-			? "text-lamp"
+			? "attending"
 			: status === "declined"
-				? "text-red-300"
-				: "text-stone-400";
-	return (
-		<span className={`typewriter text-xs ${color}`}>
-			{statusLabels[status]}
-		</span>
-	);
+				? "declined"
+				: "awaiting";
+	return <Badge variant={variant}>{statusLabels[status]}</Badge>;
 }
