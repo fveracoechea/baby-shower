@@ -42,7 +42,7 @@ function flow(overrides: Partial<ReturnType<typeof useRsvpFlow>> = {}) {
 		identify: vi.fn(),
 		submit: vi.fn(),
 		update: vi.fn(),
-		editRememberedRsvp: vi.fn(),
+		restoreRememberedRsvp: vi.fn(),
 		...overrides,
 	};
 }
@@ -76,6 +76,28 @@ describe("RSVP section", () => {
 		expect(
 			screen.getByRole("button", { name: "Find my Invitation" }),
 		).toBeDefined();
+	});
+
+	it("checks for a remembered RSVP without requiring the phone number", async () => {
+		const restoreRememberedRsvp = vi.fn();
+		mockedUseRsvpFlow.mockReturnValue(flow({ restoreRememberedRsvp }));
+
+		render(<RsvpForm />);
+
+		await waitFor(() =>
+			expect(restoreRememberedRsvp).toHaveBeenCalledWith(false),
+		);
+	});
+
+	it("restores a remembered RSVP for editing", async () => {
+		const restoreRememberedRsvp = vi.fn();
+		mockedUseRsvpFlow.mockReturnValue(flow({ restoreRememberedRsvp }));
+
+		render(<RsvpForm editRsvp />);
+
+		await waitFor(() =>
+			expect(restoreRememberedRsvp).toHaveBeenCalledWith(true),
+		);
 	});
 
 	it("hides Additional guests when the Invitation allowance is zero", () => {

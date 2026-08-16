@@ -106,20 +106,26 @@ export function useRsvpFlow() {
 		}
 	}
 
-	async function editRememberedRsvp() {
+	async function restoreRememberedRsvp(forEdit: boolean) {
 		setPhase("submitting");
 		setError(null);
 		try {
 			const result = await lookupRememberedFn();
 			if (result.status !== "found") {
-				setError("not-found");
+				if (forEdit) setError("not-found");
 				setPhase("idle");
 				return;
 			}
 			setRsvp(result.rsvp);
 			setInvitation(result.rsvp);
 			setReadOnly(result.readOnly);
-			setPhase(result.readOnly ? "confirmed" : "idle");
+			setPhase(
+				forEdit && !result.readOnly
+					? "idle"
+					: result.rsvp.attending
+						? "confirmed"
+						: "declined",
+			);
 		} catch (exception) {
 			setError(errorCode(exception));
 			setPhase("idle");
@@ -136,6 +142,6 @@ export function useRsvpFlow() {
 		identify,
 		submit: (input: GuestRsvpInput) => write(input, false),
 		update: (input: GuestRsvpInput) => write(input, true),
-		editRememberedRsvp,
+		restoreRememberedRsvp,
 	};
 }

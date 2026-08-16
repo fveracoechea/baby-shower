@@ -31,7 +31,7 @@ function flowErrorMessage(error: RsvpFlowError) {
 
 export function RsvpForm({ editRsvp = false }: { editRsvp?: boolean }) {
 	const navigate = useNavigate({ from: "/rsvp" });
-	const restoredEdit = useRef(false);
+	const restoredRsvp = useRef(false);
 	const {
 		phase,
 		rsvp,
@@ -42,7 +42,7 @@ export function RsvpForm({ editRsvp = false }: { editRsvp?: boolean }) {
 		identify,
 		submit,
 		update,
-		editRememberedRsvp,
+		restoreRememberedRsvp,
 	} = useRsvpFlow();
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [attending, setAttending] = useState<"yes" | "no" | null>(null);
@@ -68,10 +68,10 @@ export function RsvpForm({ editRsvp = false }: { editRsvp?: boolean }) {
 	}, [navigate, phase, rsvp]);
 
 	useEffect(() => {
-		if (!editRsvp || restoredEdit.current) return;
-		restoredEdit.current = true;
-		void editRememberedRsvp();
-	}, [editRememberedRsvp, editRsvp]);
+		if (restoredRsvp.current) return;
+		restoredRsvp.current = true;
+		void restoreRememberedRsvp(editRsvp);
+	}, [editRsvp, restoreRememberedRsvp]);
 
 	function identifyInvitation(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
