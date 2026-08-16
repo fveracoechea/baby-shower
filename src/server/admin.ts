@@ -163,32 +163,34 @@ export const editInvitation = createServerFn({ method: "POST" })
 	.validator(editInvitationInputSchema)
 	.handler(async ({ data }) => {
 		await requireUniquePhoneNumber(data.phoneNumber, data.id);
-		const [rsvp] = await db
-			.select({
-				additionalGuestCount: rsvps.additionalGuestCount,
-				attending: rsvps.attending,
-			})
-			.from(rsvps)
-			.where(eq(rsvps.invitationId, data.id));
-		const additionalGuestsAttending = rsvp?.attending
-			? rsvp.additionalGuestCount
-			: 0;
-		if (data.additionalGuestAllowance < additionalGuestsAttending) {
-			throw new Error(
-				"Allowance cannot be below the confirmed Additional-guest count.",
-			);
-		}
-		const [invitation] = await db
-			.update(invitations)
-			.set({
-				guestName: cleanName(data.name),
-				phoneNumber: data.phoneNumber,
-				additionalGuestAllowance: data.additionalGuestAllowance,
-			})
-			.where(eq(invitations.id, data.id))
-			.returning();
-		if (!invitation) throw new Error("Invitation not found.");
-		return invitation;
+		return db.transaction(async (tx) => {
+			const [rsvp] = await tx
+				.select({
+					additionalGuestCount: rsvps.additionalGuestCount,
+					attending: rsvps.attending,
+				})
+				.from(rsvps)
+				.where(eq(rsvps.invitationId, data.id));
+			const additionalGuestsAttending = rsvp?.attending
+				? rsvp.additionalGuestCount
+				: 0;
+			if (data.additionalGuestAllowance < additionalGuestsAttending) {
+				throw new Error(
+					"Allowance cannot be below the confirmed Additional-guest count.",
+				);
+			}
+			const [invitation] = await tx
+				.update(invitations)
+				.set({
+					guestName: cleanName(data.name),
+					phoneNumber: data.phoneNumber,
+					additionalGuestAllowance: data.additionalGuestAllowance,
+				})
+				.where(eq(invitations.id, data.id))
+				.returning();
+			if (!invitation) throw new Error("Invitation not found.");
+			return invitation;
+		});
 	});
 
 export const removeInvitation = createServerFn({ method: "POST" })

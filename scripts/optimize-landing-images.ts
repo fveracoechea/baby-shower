@@ -4,6 +4,8 @@ type Derivative = {
 	width: number;
 };
 
+export {};
+
 const derivatives: Derivative[] = [
 	{
 		source: "assets/primary-portraid.jpg",
