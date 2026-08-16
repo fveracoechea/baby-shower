@@ -7,7 +7,8 @@ CREATE TABLE `invitations` (
 	`guest_name` text NOT NULL,
 	`phone_number` text NOT NULL,
 	`additional_guest_allowance` integer NOT NULL,
-	`created_at` integer NOT NULL
+	`created_at` integer NOT NULL,
+	CONSTRAINT `invitations_additional_guest_allowance_range` CHECK (`additional_guest_allowance` between 0 and 3)
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `invitations_phone_number_unique` ON `invitations` (`phone_number`);
@@ -20,7 +21,8 @@ CREATE TABLE `rsvps` (
 	`theory` text,
 	`created_at` integer NOT NULL,
 	`updated_at` integer NOT NULL,
-	FOREIGN KEY (`invitation_id`) REFERENCES `invitations`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`invitation_id`) REFERENCES `invitations`(`id`) ON UPDATE no action ON DELETE no action,
+	CONSTRAINT `rsvps_additional_guest_count_range` CHECK (`additional_guest_count` between 0 and 3)
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `rsvps_invitation_id_unique` ON `rsvps` (`invitation_id`);
