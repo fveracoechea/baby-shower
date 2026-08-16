@@ -1,7 +1,6 @@
 import {
-	Balloon,
-	CakeSlice,
 	Calendar,
+	ClipboardList,
 	Clock3,
 	FolderOpen,
 	MapPin,
@@ -36,23 +35,16 @@ const WITNESSES = [
 	},
 	{
 		id: 2,
-		icon: Balloon,
+		icon: ClipboardList,
 		name: m.witness2_name,
 		detail: m.witness2_detail,
 		tilt: "rotate-1",
-	},
-	{
-		id: 3,
-		icon: CakeSlice,
-		name: m.witness3_name,
-		detail: m.witness3_detail,
-		tilt: "-rotate-1",
 	},
 ] as const;
 
 /**
  * The invitation state: the case file with the event facts (city only,
- * the venue stays sealed), the pinned evidence photos, and the three
+ * the venue stays sealed), the pinned evidence photos, and the two
  * witnesses strung together on the desk. The CTA scrolls to the RSVP.
  */
 export function Invitation({ onCta }: { onCta: () => void }) {
@@ -144,7 +136,7 @@ export function Invitation({ onCta }: { onCta: () => void }) {
 						aria-hidden
 						className="absolute inset-x-6 top-1/2 hidden h-0.5 -translate-y-1/2 -rotate-1 bg-string md:block"
 					/>
-					<div className="relative grid gap-8 md:grid-cols-3 md:gap-6">
+					<div className="relative mx-auto grid max-w-4xl gap-8 md:grid-cols-2 md:gap-6">
 						{WITNESSES.map((witness) => (
 							<article
 								key={witness.id}
