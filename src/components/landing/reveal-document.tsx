@@ -84,7 +84,7 @@ export function RevealDocument({ canEdit = false }: { canEdit?: boolean }) {
 				<iframe
 					title={m.reveal_open_maps()}
 					src={MAP_EMBED_URL}
-					className="h-64 w-full border border-stone-900/20"
+					className="h-64 w-full border border-stone-900/20 grayscale-[70%] contrast-110 lg:h-96"
 					loading="lazy"
 					referrerPolicy="no-referrer-when-downgrade"
 				/>

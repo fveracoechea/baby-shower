@@ -20,7 +20,8 @@ describe("Guest Reveal", () => {
 			"The mystery stays sealed until October 10. Then our family and friends will follow the clues, test their theories, and solve the case together.",
 		);
 		expect(map.getAttribute("src")).toContain("google.com/maps");
-		expect(map.classList.contains("grayscale")).toBe(false);
+		expect(map.classList.contains("grayscale-[70%]")).toBe(true);
+		expect(map.classList.contains("lg:h-96")).toBe(true);
 		expect(footerCopy.closest("footer")).not.toBeNull();
 		expect(
 			map.compareDocumentPosition(footerCopy) &
