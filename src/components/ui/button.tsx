@@ -26,7 +26,7 @@ const buttonVariants = cva(
 				text: "h-auto border-0 bg-transparent p-0 font-bold text-lamp hover:text-lamp-deep",
 				dangerText:
 					"h-auto border-0 bg-transparent p-0 font-bold text-red-300 hover:text-red-200",
-				nav: "rounded-none border-b border-transparent bg-transparent font-mono text-xs uppercase tracking-[0.06em] text-stone-400 hover:text-amber-100 data-[active=true]:border-b-lamp data-[active=true]:text-amber-100 data-[state=on]:border-lamp data-[state=on]:text-amber-100 sm:text-[10px]",
+				nav: "rounded-none border-b border-transparent bg-transparent font-mono text-xs uppercase tracking-[0.06em] text-stone-400 hover:text-amber-100 data-[active=true]:border-b-lamp data-[active=true]:text-amber-100 data-[state=on]:border-lamp data-[state=on]:text-amber-100 md:h-10 md:px-4 md:text-sm",
 				folder:
 					"rounded-b-none rounded-t-md border-stone-700 bg-stone-900 font-mono text-[11px] tracking-widest text-stone-300 hover:bg-stone-800 hover:text-amber-100 aria-current:border-case-paper aria-current:bg-case-paper aria-current:text-case-ink",
 				link: "text-primary underline-offset-4 hover:underline",

@@ -15,7 +15,7 @@ import { m } from "#/paraglide/messages";
 const FADE_MS = 150;
 
 /**
- * The short film: five story beats typed onto the case file. Case tabs and
+ * The short film: three story beats typed onto the case file. Case tabs and
  * arrow controls move between scenes; continuing from the last scene lands
  * the guest on the invitation.
  */
@@ -31,19 +31,9 @@ export function StoryReel({ onComplete }: { onComplete: () => void }) {
 			body: m.beat1_body(),
 		},
 		{
-			kicker: m.beat2_kicker(),
-			title: m.beat2_title(),
-			body: m.beat2_body(),
-		},
-		{
 			kicker: m.beat3_kicker(),
 			title: m.beat3_title(),
 			body: m.beat3_body(),
-		},
-		{
-			kicker: m.beat4_kicker(),
-			title: m.beat4_title(),
-			body: m.beat4_body(),
 		},
 		{
 			kicker: m.beat5_kicker(),
@@ -73,7 +63,7 @@ export function StoryReel({ onComplete }: { onComplete: () => void }) {
 	}, [pendingIndex, finishing, onComplete]);
 
 	const beat = beats[index];
-	const showSecondaryPhoto = index < 4;
+	const showSecondaryPhoto = index < beats.length - 1;
 	const fadingOut = pendingIndex !== null || finishing;
 
 	return (
@@ -145,7 +135,7 @@ export function StoryReel({ onComplete }: { onComplete: () => void }) {
 								alt={m.alt_couple()}
 								width={512}
 								height={341}
-								className="w-full grayscale contrast-125"
+								className="w-full grayscale-[70%] contrast-110"
 							/>
 						) : (
 							<img
@@ -153,7 +143,7 @@ export function StoryReel({ onComplete }: { onComplete: () => void }) {
 								alt={m.alt_ultrasound()}
 								width={384}
 								height={288}
-								className="w-full grayscale contrast-125"
+								className="w-full grayscale-[70%] contrast-110"
 							/>
 						)}
 						{showSecondaryPhoto ? null : (

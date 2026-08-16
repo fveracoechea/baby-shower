@@ -13,7 +13,7 @@ const toggleVariants = cva(
 					"border border-stone-900/30 bg-amber-50/70 font-mono text-xs text-stone-700 hover:bg-amber-200/70 data-[state=on]:border-stone-900 data-[state=on]:text-case-ink aria-pressed:text-case-ink",
 				girl: "border border-stone-900/30 bg-amber-50/70 font-mono text-xs text-stone-700 hover:bg-amber-200/70 data-[state=on]:border-stone-900 data-[state=on]:bg-pink-300 data-[state=on]:text-case-ink aria-pressed:bg-pink-300 aria-pressed:text-case-ink",
 				boy: "border border-stone-900/30 bg-amber-50/70 font-mono text-xs text-stone-700 hover:bg-amber-200/70 data-[state=on]:border-stone-900 data-[state=on]:bg-sky-300 data-[state=on]:text-case-ink aria-pressed:bg-sky-300 aria-pressed:text-case-ink",
-				nav: "rounded-none border-b border-transparent bg-transparent font-mono text-xs uppercase tracking-[0.06em] text-stone-400 hover:text-amber-100 data-[state=on]:border-lamp data-[state=on]:text-amber-100 aria-pressed:border-lamp aria-pressed:text-amber-100 sm:text-[10px]",
+				nav: "rounded-none border-b border-transparent bg-transparent font-mono text-xs uppercase tracking-[0.06em] text-stone-400 hover:text-amber-100 data-[state=on]:border-lamp data-[state=on]:text-amber-100 aria-pressed:border-lamp aria-pressed:text-amber-100 md:h-10 md:min-w-10 md:px-3 md:text-sm",
 			},
 			size: {
 				default:

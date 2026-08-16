@@ -91,7 +91,7 @@ export function Invitation() {
 							alt={m.alt_couple()}
 							width={768}
 							height={1253}
-							className="w-full grayscale contrast-125"
+							className="w-full grayscale-[70%] contrast-110"
 						/>
 					</picture>
 					<figcaption className="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.25em] text-stone-500">
@@ -106,7 +106,7 @@ export function Invitation() {
 						alt=""
 						width={512}
 						height={341}
-						className="w-full grayscale contrast-125"
+						className="w-full grayscale-[70%] contrast-110"
 					/>
 				</figure>
 				<figure className="absolute -bottom-2 -left-2 z-10 w-40 -rotate-6 bg-stone-100 p-1.5 pb-7 shadow-xl sm:w-48">
@@ -119,7 +119,7 @@ export function Invitation() {
 						alt={m.alt_ultrasound()}
 						width={384}
 						height={288}
-						className="w-full grayscale contrast-125"
+						className="w-full grayscale-[70%] contrast-110"
 					/>
 					<figcaption className="mt-1.5 text-center font-mono text-[9px] uppercase tracking-[0.3em] text-stone-500">
 						{m.exhibit_a()}
