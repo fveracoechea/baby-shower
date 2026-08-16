@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as PrototypeMysteryRouteImport } from './routes/prototype.mystery'
 import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
@@ -17,6 +18,11 @@ import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
@@ -37,12 +43,14 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/api/$': typeof ApiSplatRoute
   '/prototype/mystery': typeof PrototypeMysteryRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/api/$': typeof ApiSplatRoute
   '/prototype/mystery': typeof PrototypeMysteryRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
@@ -50,20 +58,23 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/api/$': typeof ApiSplatRoute
   '/prototype/mystery': typeof PrototypeMysteryRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/$' | '/prototype/mystery' | '/api/rpc/$'
+  fullPaths: '/' | '/admin' | '/api/$' | '/prototype/mystery' | '/api/rpc/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/$' | '/prototype/mystery' | '/api/rpc/$'
-  id: '__root__' | '/' | '/api/$' | '/prototype/mystery' | '/api/rpc/$'
+  to: '/' | '/admin' | '/api/$' | '/prototype/mystery' | '/api/rpc/$'
+  id:
+    '__root__' | '/' | '/admin' | '/api/$' | '/prototype/mystery' | '/api/rpc/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   ApiSplatRoute: typeof ApiSplatRoute
   PrototypeMysteryRoute: typeof PrototypeMysteryRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
@@ -76,6 +87,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/$': {
@@ -104,6 +122,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   ApiSplatRoute: ApiSplatRoute,
   PrototypeMysteryRoute: PrototypeMysteryRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
@@ -111,12 +130,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
