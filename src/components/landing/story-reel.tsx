@@ -142,8 +142,10 @@ export function StoryReel({ onComplete }: { onComplete: () => void }) {
 							className="absolute -top-2 left-1/2 z-10 h-4 w-14 -translate-x-1/2 -rotate-3 bg-lamp/80"
 						/>
 						<img
-							src="/assets/baby-ultrasound.jpg"
+							src="/assets/baby-ultrasound-384.webp"
 							alt={m.alt_ultrasound()}
+							width={384}
+							height={288}
 							className="w-full grayscale contrast-125"
 						/>
 						<figcaption className="mt-1.5 text-center font-mono text-[9px] uppercase tracking-[0.3em] text-stone-500">

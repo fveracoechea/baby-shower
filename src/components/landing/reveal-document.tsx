@@ -74,15 +74,19 @@ export function RevealDocument() {
 				<div className="grid grid-cols-2 gap-4">
 					<figure className="-rotate-2 bg-white p-1.5 shadow-lg">
 						<img
-							src="/assets/venue-exterior.jpg"
+							src="/assets/venue-exterior-640.webp"
 							alt={m.alt_venue_exterior()}
+							width={640}
+							height={426}
 							className="w-full"
 						/>
 					</figure>
 					<figure className="rotate-2 bg-white p-1.5 shadow-lg">
 						<img
-							src="/assets/venue-interior.jpg"
+							src="/assets/venue-interior-640.webp"
 							alt={m.alt_venue_interior()}
+							width={640}
+							height={426}
 							className="w-full"
 						/>
 					</figure>

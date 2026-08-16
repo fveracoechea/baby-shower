@@ -132,9 +132,9 @@ export const COPY = {
 } as const;
 
 export const ASSETS = {
-	hero: "/prototype/mystery/assets/primary-portraid.jpg",
-	secondary: "/prototype/mystery/assets/secondary-landscape.jpeg",
-	ultrasound: "/prototype/mystery/assets/baby-first-ultrasound.JPG",
-	venueExterior: "/prototype/mystery/assets/venue-exterior.jpg",
-	venueInterior: "/prototype/mystery/assets/venue-interior.jpg",
+	hero: "/assets/couple-portrait-768.webp",
+	secondary: "/assets/secondary-landscape-1024.webp",
+	ultrasound: "/assets/baby-ultrasound-384.webp",
+	venueExterior: "/assets/venue-exterior-640.webp",
+	venueInterior: "/assets/venue-interior-640.webp",
 } as const;
