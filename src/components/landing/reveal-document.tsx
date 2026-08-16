@@ -20,7 +20,8 @@ import { Separator } from "#/components/ui/separator";
 import { m } from "#/paraglide/messages";
 
 const MAPS_URL = "https://maps.app.goo.gl/C36KF6Vh7rPCbdss6";
-const REGISTRY_URL = "#registry-to-be-confirmed";
+const MAP_EMBED_URL =
+	"https://www.google.com/maps?q=60+E+Jefferson+St+Ste+A,+Hoschton,+GA+30548&output=embed";
 
 /**
  * The Reveal: a second, unsealed document that slides up over the case
@@ -91,6 +92,13 @@ export function RevealDocument() {
 						/>
 					</figure>
 				</div>
+				<iframe
+					title={m.reveal_open_maps()}
+					src={MAP_EMBED_URL}
+					className="h-64 w-full border border-stone-900/20 grayscale"
+					loading="lazy"
+					referrerPolicy="no-referrer-when-downgrade"
+				/>
 				<Separator className="bg-stone-900/20" />
 				<div className="flex flex-col gap-2">
 					<p className={MONO_LABEL}>{m.reveal_dress_code_label()}</p>
@@ -111,13 +119,13 @@ export function RevealDocument() {
 					<p className="font-mono text-sm leading-relaxed text-stone-700">
 						{m.event_registry_note()}
 					</p>
-					<a
-						href={REGISTRY_URL}
-						className="inline-flex w-fit items-center gap-2 font-mono text-sm text-case-ink underline decoration-stamp/60 underline-offset-4 transition-colors hover:text-stamp focus-visible:outline-2 focus-visible:outline-stamp"
+					<span
+						aria-disabled="true"
+						className="inline-flex w-fit items-center gap-2 font-mono text-sm text-stone-500"
 					>
 						<Gift className="size-4" aria-hidden />
 						{m.reveal_registry_cta()}
-					</a>
+					</span>
 				</div>
 				<p className="border-t border-stone-900/15 pt-4 text-center font-mono text-xs text-stone-500">
 					{m.beat4_body()}

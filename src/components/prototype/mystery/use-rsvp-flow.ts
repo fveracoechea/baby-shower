@@ -1,20 +1,8 @@
-import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 
 import type { RsvpDto, RsvpInput } from "#/lib/rsvp";
-import { lookupRsvp, submitRsvp, updateRsvp } from "#/server/rsvp";
 
-/**
- * The RSVP state machine every prototype variant drives.
- * Variants own the presentation; this hook owns the flow and the server calls.
- *
- * Phases:
- * - idle: showing the form
- * - submitting: a server call is in flight
- * - confirmed: created/updated, attending -> show the Reveal
- * - declined: created/updated, not attending -> gracious state, no Reveal
- * - already-confirmed: the name already has an RSVP (or retrieval matched)
- */
+/** Local state only: the mystery route is a visual prototype, not a Guest flow. */
 export type FlowPhase =
 	| "idle"
 	| "submitting"
@@ -22,67 +10,48 @@ export type FlowPhase =
 	| "declined"
 	| "already-confirmed";
 
-export function useRsvpFlow() {
-	const submitFn = useServerFn(submitRsvp);
-	const updateFn = useServerFn(updateRsvp);
-	const lookupFn = useServerFn(lookupRsvp);
+function toPrototypeRsvp(
+	input: Exclude<RsvpInput, { phoneNumber: string }>,
+): RsvpDto {
+	return {
+		id: 0,
+		name: input.name,
+		phoneNumber: "",
+		additionalGuestAllowance: 3,
+		attending: input.attending,
+		additionalGuestCount: Math.max(0, input.partySize - 1),
+		partySize: input.partySize,
+		theory: input.theory,
+		createdAt: Date.now(),
+		updatedAt: Date.now(),
+	};
+}
 
+export function useRsvpFlow() {
 	const [phase, setPhase] = useState<FlowPhase>("idle");
 	const [rsvp, setRsvp] = useState<RsvpDto | null>(null);
 	const [error, setError] = useState<string | null>(null);
 
-	async function submit(input: RsvpInput) {
-		setPhase("submitting");
-		setError(null);
-		try {
-			const res = await submitFn({ data: input });
-			setRsvp(res.rsvp);
-			if (res.status === "existing") {
-				setPhase("already-confirmed");
-			} else {
-				setPhase(res.rsvp.attending ? "confirmed" : "declined");
-			}
-		} catch (err) {
-			setError(err instanceof Error ? err.message : "Something went wrong");
-			setPhase("idle");
-		}
+	function submit(input: RsvpInput) {
+		if (!("name" in input)) return;
+		const next = toPrototypeRsvp(input);
+		setRsvp(next);
+		setPhase(next.attending ? "confirmed" : "declined");
 	}
 
-	async function update(input: RsvpInput) {
-		setPhase("submitting");
-		setError(null);
-		try {
-			const res = await updateFn({ data: input });
-			setRsvp(res.rsvp);
-			setPhase(res.rsvp.attending ? "confirmed" : "declined");
-		} catch (err) {
-			setError(err instanceof Error ? err.message : "Something went wrong");
+	function update(input: RsvpInput) {
+		submit(input);
+	}
+
+	function retrieve(name: string) {
+		if (rsvp?.name === name) {
 			setPhase("already-confirmed");
+			return true;
 		}
+		setError("not-found");
+		return false;
 	}
 
-	/** Retrieval: re-enter a name to re-show the RSVP. Returns true on match. */
-	async function retrieve(name: string): Promise<boolean> {
-		setPhase("submitting");
-		setError(null);
-		try {
-			const res = await lookupFn({ data: { name } });
-			if (res.rsvp) {
-				setRsvp(res.rsvp);
-				setPhase("already-confirmed");
-				return true;
-			}
-			setError("not-found");
-			setPhase("idle");
-			return false;
-		} catch (err) {
-			setError(err instanceof Error ? err.message : "Something went wrong");
-			setPhase("idle");
-			return false;
-		}
-	}
-
-	/** Back to the form (variants pre-fill from `rsvp` when set). */
 	function changeRsvp() {
 		setError(null);
 		setPhase("idle");
