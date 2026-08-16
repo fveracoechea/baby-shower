@@ -7,8 +7,8 @@ import * as schema from "#/db/schema";
 import {
 	addInvitationInputSchema,
 	editInvitationInputSchema,
-	editInvitationRecord,
 } from "#/server/admin";
+import { editInvitationRecord } from "#/server/admin.server";
 
 describe("admin server functions", () => {
 	it("normalizes an international phone number before creating an Invitation", () => {
