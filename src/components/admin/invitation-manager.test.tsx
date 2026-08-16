@@ -36,6 +36,7 @@ describe("InvitationManager", () => {
 				onAdd={vi.fn()}
 				onEdit={vi.fn()}
 				onRemove={removeInvitation}
+				onLogout={vi.fn()}
 			/>,
 		);
 

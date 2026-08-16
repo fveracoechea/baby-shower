@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Courier+Prime:wght@400;700&display=swap');
+@import '@fontsource-variable/fraunces/wght.css';
+@import '@fontsource-variable/fraunces/wght-italic.css';
+@import '@fontsource/courier-prime/latin-400.css';
+@import '@fontsource/courier-prime/latin-700.css';
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
@@ -170,15 +173,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  color: var(--lamp);
-  text-decoration-color: rgba(252, 211, 77, 0.4);
+a:not([data-slot='button']) {
+  color: var(--color-red-800);
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-red-800);
+  text-decoration-style: dashed;
   text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
+  text-underline-offset: 0.2em;
+  text-decoration-skip-ink: auto;
 }
 
-a:hover {
-  color: var(--lamp-deep);
+a:not([data-slot='button']):hover {
+  color: var(--color-red-700);
+  text-decoration-color: var(--color-red-700);
+}
+
+a:not([data-slot='button']):focus-visible {
+  border-radius: 0.125rem;
+  outline: 2px solid var(--color-red-700);
+  outline-offset: 3px;
+}
+
+a[data-slot='button'] {
+  text-decoration: none;
 }
 
 code {
@@ -190,7 +207,7 @@ code {
 }
 
 .display-title {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: 'Fraunces Variable', Georgia, serif;
 }
 
 .typewriter {

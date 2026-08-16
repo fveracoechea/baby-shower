@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="lamp" cx="50%" cy="0%" r="78%">
+      <stop offset="0" stop-color="#5e4b23"/>
+      <stop offset="0.48" stop-color="#211b12"/>
+      <stop offset="1" stop-color="#080706"/>
+    </radialGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff7d7"/>
+      <stop offset="1" stop-color="#f4d57b"/>
+    </linearGradient>
+    <linearGradient id="envelope" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7cc58"/>
+      <stop offset="1" stop-color="#d89a22"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity="0.62"/>
+    </filter>
+    <filter id="smallShadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.78" numOctaves="3" seed="24" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono"/>
+      <feComponentTransfer in="mono" result="faded">
+        <feFuncA type="table" tableValues="0 0.09"/>
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" in2="faded" mode="multiply"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#lamp)"/>
+  <path d="M-20 530 C280 450 470 520 750 422 S1070 320 1230 360" fill="none" stroke="#8c1717" stroke-width="4" opacity="0.6"/>
+  <circle cx="104" cy="505" r="10" fill="#8c1717"/>
+  <circle cx="1082" cy="373" r="10" fill="#8c1717"/>
+
+  <g transform="translate(91 67) rotate(-2 510 250)" filter="url(#shadow)">
+    <path d="M0 26 Q0 0 26 0 H302 L332 28 H1000 Q1020 28 1020 48 V492 Q1020 510 1000 510 H20 Q0 510 0 490 Z" fill="#d6a53a"/>
+    <rect x="21" y="24" width="978" height="466" rx="3" fill="url(#paper)" filter="url(#grain)"/>
+    <path d="M56 87 H966" stroke="#8f7b55" stroke-width="2" opacity="0.45"/>
+    <path d="M650 87 V444" stroke="#8f7b55" stroke-width="2" opacity="0.34"/>
+
+    <g transform="translate(67 109)">
+      <text x="0" y="0" fill="#8b1717" font-family="'Courier New', monospace" font-size="18" font-weight="700" letter-spacing="5">EXPEDIENTE 10.10.26</text>
+      <text x="0" y="86" fill="#1c1917" font-family="Georgia, serif" font-size="66" font-weight="700">¿Niña o niño?</text>
+      <text x="2" y="132" fill="#51483b" font-family="'Courier New', monospace" font-size="24" letter-spacing="3">GIRL OR BOY?</text>
+      <path d="M0 166 H520" stroke="#1c1917" stroke-width="3"/>
+      <text x="0" y="220" fill="#1c1917" font-family="Georgia, serif" font-size="39" font-style="italic">Nancy &amp; Francisco</text>
+      <text x="2" y="272" fill="#51483b" font-family="'Courier New', monospace" font-size="20" font-weight="700" letter-spacing="2">BABY SHOWER + GENDER REVEAL</text>
+      <text x="28" y="323" fill="#1c1917" font-family="'Courier New', monospace" font-size="22">OCTOBER 10, 2026  •  HOSCHTON, GA</text>
+    </g>
+
+    <g transform="translate(697 111) rotate(4 124 157)" filter="url(#smallShadow)">
+      <rect width="248" height="314" rx="3" fill="#eee8d7"/>
+      <rect x="13" y="13" width="222" height="235" fill="#11100f"/>
+      <ellipse cx="124" cy="127" rx="88" ry="75" fill="#4b4a47"/>
+      <ellipse cx="130" cy="129" rx="58" ry="48" fill="#777671"/>
+      <path d="M87 141 C105 101 136 94 157 115 C178 135 166 174 133 180 C108 184 86 168 87 141 Z" fill="#d2d0c9"/>
+      <circle cx="124" cy="133" r="13" fill="#f1efe7"/>
+      <path d="M94 104 Q128 76 170 102" fill="none" stroke="#b9b7b0" stroke-width="6" stroke-linecap="round"/>
+      <text x="22" y="281" fill="#33302b" font-family="'Courier New', monospace" font-size="14" font-weight="700" letter-spacing="2">EVIDENCE 01</text>
+      <text x="22" y="302" fill="#6a6256" font-family="'Courier New', monospace" font-size="12">THE MYSTERY BEGINS</text>
+      <path d="M204 -8 C226 5 228 38 207 55" fill="none" stroke="#bbb4a5" stroke-width="7" stroke-linecap="round"/>
+    </g>
+
+    <g transform="translate(830 369) rotate(-8)" opacity="0.95">
+      <rect x="0" y="0" width="139" height="58" rx="3" fill="none" stroke="#9f1d1d" stroke-width="6"/>
+      <text x="14" y="38" fill="#9f1d1d" font-family="'Courier New', monospace" font-size="20" font-weight="700" letter-spacing="2">TOP SECRET</text>
+    </g>
+  </g>
+
+  <g transform="translate(18 485) scale(0.72) rotate(8 110 78)" filter="url(#smallShadow)">
+    <rect width="225" height="150" fill="url(#envelope)"/>
+    <path d="M0 0 L112 85 L225 0" fill="#efbf46"/>
+    <path d="M0 150 L91 65 Q112 45 134 65 L225 150" fill="#eab037"/>
+    <circle cx="112" cy="84" r="31" fill="#941b1b" stroke="#671111" stroke-width="5"/>
+    <text x="112" y="97" text-anchor="middle" fill="#f7dda0" font-family="Georgia, serif" font-size="39" font-weight="700">?</text>
+  </g>
+
+  <rect x="18" y="18" width="1164" height="594" fill="none" stroke="#f8db87" stroke-width="2" opacity="0.28"/>
+</svg>

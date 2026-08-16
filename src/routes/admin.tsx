@@ -1,4 +1,8 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	useNavigate,
+	useRouter,
+} from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 
 import { InvitationManager } from "#/components/admin/invitation-manager";
@@ -8,9 +12,13 @@ import {
 	getAdminView,
 	removeInvitation,
 } from "#/server/admin";
+import { logoutAdmin, requireAdminPage } from "#/server/admin-auth";
 
 export const Route = createFileRoute("/admin")({
-	loader: () => getAdminView(),
+	loader: async () => {
+		await requireAdminPage();
+		return getAdminView();
+	},
 	head: () => ({
 		meta: [
 			{ title: "Invitation ledger" },
@@ -23,9 +31,11 @@ export const Route = createFileRoute("/admin")({
 function AdminPage() {
 	const view = Route.useLoaderData();
 	const router = useRouter();
+	const navigate = useNavigate({ from: "/admin" });
 	const add = useServerFn(addInvitation);
 	const edit = useServerFn(editInvitation);
 	const remove = useServerFn(removeInvitation);
+	const logout = useServerFn(logoutAdmin);
 
 	async function refresh() {
 		await router.invalidate();
@@ -34,6 +44,10 @@ function AdminPage() {
 	return (
 		<InvitationManager
 			view={view}
+			onLogout={async () => {
+				await logout();
+				await navigate({ to: "/admin/login" });
+			}}
 			onAdd={async (input) => {
 				await add({ data: input });
 				await refresh();

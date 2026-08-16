@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1786323702993,
-      "tag": "0000_fuzzy_shatterstar",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1786323702994,
-      "tag": "0001_invitation_rsvps",
+      "when": 1786898946575,
+      "tag": "0000_initial-schema",
       "breakpoints": true
     }
   ]

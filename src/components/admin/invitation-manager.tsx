@@ -15,6 +15,7 @@ interface InvitationManagerProps {
 	onAdd(input: InvitationInput): Promise<void> | void;
 	onEdit(input: EditingInvitation): Promise<void> | void;
 	onRemove(id: number): Promise<void> | void;
+	onLogout(): Promise<void> | void;
 }
 
 const statusLabels: Record<InvitationStatus, string> = {
@@ -32,6 +33,7 @@ export function InvitationManager({
 	onAdd,
 	onEdit,
 	onRemove,
+	onLogout,
 }: InvitationManagerProps) {
 	const [form, setForm] = useState<InvitationInput>(emptyInvitation);
 	const [editing, setEditing] = useState<number | null>(null);
@@ -96,7 +98,14 @@ export function InvitationManager({
 
 	return (
 		<main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
-			<header className="border-b border-lamp/30 pb-6">
+			<header className="relative border-b border-lamp/30 pb-6 pr-24">
+				<button
+					type="button"
+					onClick={onLogout}
+					className="absolute top-0 right-0 font-mono text-xs uppercase tracking-widest text-stone-400 underline underline-offset-4 hover:text-lamp"
+				>
+					Sign out
+				</button>
 				<p className="typewriter text-xs uppercase tracking-[0.28em] text-lamp">
 					Case file 19
 				</p>

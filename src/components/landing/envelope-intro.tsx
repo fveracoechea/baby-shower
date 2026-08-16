@@ -9,7 +9,7 @@ import { m } from "#/paraglide/messages";
  */
 export function EnvelopeIntro({ step }: { step: number }) {
 	return (
-		<div className="fixed inset-0 z-40 grid place-items-center overflow-hidden bg-gradient-to-b from-neutral-950 via-stone-950 to-black p-6">
+		<div className="fixed inset-0 z-40 grid place-items-center overflow-hidden bg-gradient-to-b from-neutral-950 via-stone-950 to-black p-4 sm:p-6">
 			<div aria-hidden className={LAMP_GLOW} />
 			<div className="relative flex flex-col items-center gap-12">
 				<div
@@ -19,7 +19,7 @@ export function EnvelopeIntro({ step }: { step: number }) {
 							: "motion-safe:transition-all motion-safe:duration-700"
 					}
 				>
-					<div className="relative h-48 w-72 [perspective:900px] sm:h-56 sm:w-88">
+					<div className="relative aspect-3/2 w-64 [perspective:900px] sm:w-88">
 						{/* envelope back */}
 						<div className="absolute inset-0 bg-lamp/90 shadow-2xl" />
 						{/* the letter inside */}
@@ -31,7 +31,7 @@ export function EnvelopeIntro({ step }: { step: number }) {
 							<p className="font-mono text-[10px] tracking-[0.35em] text-stamp">
 								{m.envelope_top_secret()}
 							</p>
-							<p className="mt-1 font-mono text-[10px] text-stone-500">
+							<p className="mt-1 font-mono text-sm leading-relaxed text-stone-500">
 								{m.envelope_case_number()}
 							</p>
 							<p className="display-title mt-3 text-2xl text-case-ink">
@@ -65,7 +65,7 @@ export function EnvelopeIntro({ step }: { step: number }) {
 						</Stamp>
 					</div>
 				</div>
-				<p className="font-mono text-[11px] tracking-[0.4em] text-stone-500">
+				<p className="font-mono text-sm leading-relaxed text-stone-500">
 					{m.envelope_case_number()}
 				</p>
 			</div>

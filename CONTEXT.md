@@ -25,7 +25,7 @@ A person who attends with the Guest named on an Invitation. Each Invitation has 
 _Avoid_: Plus-one, companion, "+1" as a noun in prose
 
 **Reveal**:
-The post-confirmation content shown only to attending guests: venue name, address (as a Google Maps link), an embedded Google Map, venue photos, date, start-end time, and the dress code. The public landing shows only the city ("Hoschton, GA") before confirmation.
+The post-confirmation page shown after any filed RSVP: venue name, address (as a Google Maps link), an embedded Google Map, venue photos, date, start-end time, and the dress code. A declined Guest also sees a "We will miss you" message. The public landing shows only the city ("Hoschton, GA") before confirmation.
 _Avoid_: details section, location block
 
 **Cutoff**:
@@ -37,7 +37,7 @@ The "Already confirmed?" path: a Guest re-enters the phone number on their Invit
 _Avoid_: login, session
 
 **Admin view**:
-The tailnet-gated page at `/admin`: a summary strip plus one table where hosts add, edit, and remove Invitations and see each RSVP status. Network-level gating only (Caddy tailnet matcher) - no app-level auth. Hosts manage RSVP eligibility and Invitation details, but do not change a Guest's response.
+The host page at `/admin`: a summary strip plus one table where hosts add, edit, and remove Invitations and see each RSVP status. It requires the shared Admin password and keeps a host signed in with an encrypted, 30-day, HttpOnly cookie; the tailnet remains an additional network-level gate. Hosts manage RSVP eligibility and Invitation details, but do not change a Guest's response.
 _Avoid_: dashboard, backoffice
 
 **Headcount**:

@@ -1,18 +1,12 @@
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
-import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
-import { getContext } from "./integrations/tanstack-query/root-provider";
 import { deLocalizeUrl, localizeUrl } from "./paraglide/runtime";
 import { routeTree } from "./routeTree.gen";
 
 export function getRouter() {
-	const context = getContext();
-
 	const router = createTanStackRouter({
 		routeTree,
-		context,
 		scrollRestoration: true,
 		defaultPreload: "intent",
-		defaultPreloadStaleTime: 0,
 		// Paraglide url strategy: the router matches delocalized URLs (/es/x -> /x)
 		// and emits localized ones (/x -> /es/x when the locale is es).
 		rewrite: {
@@ -28,8 +22,6 @@ export function getRouter() {
 			},
 		},
 	});
-
-	setupRouterSsrQueryIntegration({ router, queryClient: context.queryClient });
 
 	return router;
 }

@@ -1,16 +1,6 @@
 import { sql } from "drizzle-orm";
 import { check, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const todos = sqliteTable("todos", {
-	id: integer({ mode: "number" }).primaryKey({
-		autoIncrement: true,
-	}),
-	title: text().notNull(),
-	createdAt: integer("created_at", { mode: "timestamp" }).default(
-		sql`(unixepoch())`,
-	),
-});
-
 export const invitations = sqliteTable(
 	"invitations",
 	{
@@ -36,7 +26,7 @@ export const rsvps = sqliteTable(
 		id: integer({ mode: "number" }).primaryKey({ autoIncrement: true }),
 		invitationId: integer("invitation_id")
 			.notNull()
-			.references(() => invitations.id)
+			.references(() => invitations.id, { onDelete: "cascade" })
 			.unique(),
 		attending: integer("attending", { mode: "boolean" }).notNull(),
 		additionalGuestCount: integer("additional_guest_count")
@@ -51,9 +41,18 @@ export const rsvps = sqliteTable(
 			.$defaultFn(() => new Date()),
 	},
 	(table) => [
+		check("rsvps_attending_boolean", sql`${table.attending} in (0, 1)`),
 		check(
 			"rsvps_additional_guest_count_range",
 			sql`${table.additionalGuestCount} between 0 and 3`,
+		),
+		check(
+			"rsvps_declined_without_additional_guests",
+			sql`${table.attending} = 1 or ${table.additionalGuestCount} = 0`,
+		),
+		check(
+			"rsvps_theory_values",
+			sql`${table.theory} is null or ${table.theory} in ('girl', 'boy')`,
 		),
 	],
 );

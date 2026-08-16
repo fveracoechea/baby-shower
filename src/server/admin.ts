@@ -5,6 +5,7 @@ import { z } from "zod";
 import { db } from "#/db";
 import { invitations, rsvps } from "#/db/schema";
 import { normalizeUsPhoneNumber } from "#/lib/phone";
+import { adminAuthMiddleware } from "#/server/admin-auth";
 
 const phoneNumberSchema = z
 	.string()
@@ -43,7 +44,7 @@ const removeInvitationInputSchema = z.object({
 
 export type InvitationStatus = "awaiting-response" | "attending" | "declined";
 
-export interface AdminInvitation {
+interface AdminInvitation {
 	id: number;
 	name: string;
 	phoneNumber: string;
@@ -53,7 +54,7 @@ export interface AdminInvitation {
 	partySize: number | null;
 }
 
-export interface AdminSummary {
+interface AdminSummary {
 	invitationCount: number;
 	awaitingResponseCount: number;
 	attendingCount: number;
@@ -92,8 +93,9 @@ async function requireUniquePhoneNumber(
 	}
 }
 
-export const getAdminView = createServerFn({ method: "GET" }).handler(
-	async (): Promise<AdminView> => {
+export const getAdminView = createServerFn({ method: "GET" })
+	.middleware([adminAuthMiddleware])
+	.handler(async (): Promise<AdminView> => {
 		const rows = await db
 			.select({ invitation: invitations, rsvp: rsvps })
 			.from(invitations)
@@ -141,10 +143,10 @@ export const getAdminView = createServerFn({ method: "GET" }).handler(
 					.length,
 			},
 		};
-	},
-);
+	});
 
 export const addInvitation = createServerFn({ method: "POST" })
+	.middleware([adminAuthMiddleware])
 	.validator(addInvitationInputSchema)
 	.handler(async ({ data }) => {
 		await requireUniquePhoneNumber(data.phoneNumber);
@@ -160,6 +162,7 @@ export const addInvitation = createServerFn({ method: "POST" })
 	});
 
 export const editInvitation = createServerFn({ method: "POST" })
+	.middleware([adminAuthMiddleware])
 	.validator(editInvitationInputSchema)
 	.handler(async ({ data }) => {
 		await requireUniquePhoneNumber(data.phoneNumber, data.id);
@@ -194,14 +197,12 @@ export const editInvitation = createServerFn({ method: "POST" })
 	});
 
 export const removeInvitation = createServerFn({ method: "POST" })
+	.middleware([adminAuthMiddleware])
 	.validator(removeInvitationInputSchema)
 	.handler(async ({ data }) => {
-		await db.transaction(async (tx) => {
-			await tx.delete(rsvps).where(eq(rsvps.invitationId, data.id));
-			const deleted = await tx
-				.delete(invitations)
-				.where(eq(invitations.id, data.id))
-				.returning();
-			if (!deleted[0]) throw new Error("Invitation not found.");
-		});
+		const deleted = await db
+			.delete(invitations)
+			.where(eq(invitations.id, data.id))
+			.returning();
+		if (!deleted[0]) throw new Error("Invitation not found.");
 	});

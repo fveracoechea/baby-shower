@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import LocaleSwitcher from "#/components/LocaleSwitcher";
 import { LAMP_GLOW } from "#/components/landing/case-ui";
 import { EnvelopeIntro } from "#/components/landing/envelope-intro";
-import { Invitation } from "#/components/landing/invitation";
+import { Invitation, Witnesses } from "#/components/landing/invitation";
 import { RsvpSection } from "#/components/landing/rsvp-section";
 import { StoryReel } from "#/components/landing/story-reel";
 import { Button } from "#/components/ui/button";
@@ -15,8 +15,8 @@ type Stage = "envelope" | "story" | "invite";
  * plays as auto-advancing scenes, and the guest lands on the invitation
  * with the RSVP typed onto the case file.
  */
-export function Landing() {
-	const [stage, setStage] = useState<Stage>("envelope");
+export function Landing({ editRsvp = false }: { editRsvp?: boolean }) {
+	const [stage, setStage] = useState<Stage>(editRsvp ? "invite" : "envelope");
 	const [envelopeStep, setEnvelopeStep] = useState(0);
 
 	// The envelope opens on load, then falls away into the case file.
@@ -59,29 +59,29 @@ export function Landing() {
 				className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.55))]"
 			/>
 
-			<LocaleSwitcher />
+			<nav className="pointer-events-none fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-4 p-4">
+				<LocaleSwitcher />
+				{stage !== "invite" ? (
+					<Button
+						type="button"
+						variant="outline"
+						onClick={skipToRsvp}
+						className="pointer-events-auto h-8 rounded-md border-stone-700 bg-stone-900/80 px-3 font-mono text-[10px] uppercase tracking-[0.16em] text-stone-300 hover:bg-stone-800 hover:text-amber-100"
+					>
+						{m.story_skip()}
+					</Button>
+				) : null}
+			</nav>
 
 			{stage === "envelope" ? <EnvelopeIntro step={envelopeStep} /> : null}
 
 			{stage === "story" ? <StoryReel onComplete={completeStory} /> : null}
 
 			{stage === "invite" ? (
-				<div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-24 px-4 py-16 sm:py-24">
+				<div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-16 px-4 py-16 sm:py-24">
 					<Invitation onCta={scrollToRsvp} />
-					<RsvpSection />
-				</div>
-			) : null}
-
-			{stage !== "invite" ? (
-				<div className="fixed right-4 bottom-5 z-50">
-					<Button
-						type="button"
-						variant="outline"
-						onClick={skipToRsvp}
-						className="rounded-md border-stone-700 bg-stone-900/80 font-mono text-[11px] uppercase tracking-[0.2em] text-stone-300 hover:bg-stone-800 hover:text-amber-100"
-					>
-						{m.story_skip()}
-					</Button>
+					<RsvpSection editRsvp={editRsvp} />
+					<Witnesses />
 				</div>
 			) : null}
 		</main>

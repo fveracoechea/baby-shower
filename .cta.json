@@ -21,10 +21,7 @@
     "biome",
     "nitro",
     "drizzle",
-    "oRPC",
     "paraglide",
-    "shadcn",
-    "t3env",
-    "tanstack-query"
+    "shadcn"
   ]
 }

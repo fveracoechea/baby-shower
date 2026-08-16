@@ -11,9 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
-import { Route as ApiSplatRouteImport } from './routes/api.$'
-import { Route as PrototypeMysteryRouteImport } from './routes/prototype.mystery'
-import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
+import { Route as RevealRouteImport } from './routes/reveal'
+import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -25,59 +24,49 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiSplatRoute = ApiSplatRouteImport.update({
-  id: '/api/$',
-  path: '/api/$',
+const RevealRoute = RevealRouteImport.update({
+  id: '/reveal',
+  path: '/reveal',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PrototypeMysteryRoute = PrototypeMysteryRouteImport.update({
-  id: '/prototype/mystery',
-  path: '/prototype/mystery',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
-  id: '/api/rpc/$',
-  path: '/api/rpc/$',
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin_/login',
+  path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/api/$': typeof ApiSplatRoute
-  '/prototype/mystery': typeof PrototypeMysteryRoute
-  '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/reveal': typeof RevealRoute
+  '/admin/login': typeof AdminLoginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/api/$': typeof ApiSplatRoute
-  '/prototype/mystery': typeof PrototypeMysteryRoute
-  '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/reveal': typeof RevealRoute
+  '/admin/login': typeof AdminLoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/api/$': typeof ApiSplatRoute
-  '/prototype/mystery': typeof PrototypeMysteryRoute
-  '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/reveal': typeof RevealRoute
+  '/admin_/login': typeof AdminLoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/api/$' | '/prototype/mystery' | '/api/rpc/$'
+  fullPaths: '/' | '/admin' | '/reveal' | '/admin/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/api/$' | '/prototype/mystery' | '/api/rpc/$'
-  id:
-    '__root__' | '/' | '/admin' | '/api/$' | '/prototype/mystery' | '/api/rpc/$'
+  to: '/' | '/admin' | '/reveal' | '/admin/login'
+  id: '__root__' | '/' | '/admin' | '/reveal' | '/admin_/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
-  ApiSplatRoute: typeof ApiSplatRoute
-  PrototypeMysteryRoute: typeof PrototypeMysteryRoute
-  ApiRpcSplatRoute: typeof ApiRpcSplatRoute
+  RevealRoute: typeof RevealRoute
+  AdminLoginRoute: typeof AdminLoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -96,25 +85,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/$': {
-      id: '/api/$'
-      path: '/api/$'
-      fullPath: '/api/$'
-      preLoaderRoute: typeof ApiSplatRouteImport
+    '/reveal': {
+      id: '/reveal'
+      path: '/reveal'
+      fullPath: '/reveal'
+      preLoaderRoute: typeof RevealRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/prototype/mystery': {
-      id: '/prototype/mystery'
-      path: '/prototype/mystery'
-      fullPath: '/prototype/mystery'
-      preLoaderRoute: typeof PrototypeMysteryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/rpc/$': {
-      id: '/api/rpc/$'
-      path: '/api/rpc/$'
-      fullPath: '/api/rpc/$'
-      preLoaderRoute: typeof ApiRpcSplatRouteImport
+    '/admin_/login': {
+      id: '/admin_/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -123,9 +105,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
-  ApiSplatRoute: ApiSplatRoute,
-  PrototypeMysteryRoute: PrototypeMysteryRoute,
-  ApiRpcSplatRoute: ApiRpcSplatRoute,
+  RevealRoute: RevealRoute,
+  AdminLoginRoute: AdminLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

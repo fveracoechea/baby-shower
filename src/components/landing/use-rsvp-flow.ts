@@ -2,7 +2,12 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 
 import type { GuestRsvpInput, RsvpDto } from "#/lib/rsvp";
-import { lookupRsvp, submitRsvp, updateRsvp } from "#/server/rsvp";
+import {
+	lookupRememberedRsvp,
+	lookupRsvp,
+	submitRsvp,
+	updateRsvp,
+} from "#/server/rsvp";
 
 export type FlowPhase =
 	| "idle"
@@ -21,6 +26,7 @@ export function useRsvpFlow() {
 	const submitFn = useServerFn(submitRsvp);
 	const updateFn = useServerFn(updateRsvp);
 	const lookupFn = useServerFn(lookupRsvp);
+	const lookupRememberedFn = useServerFn(lookupRememberedRsvp);
 	const [phase, setPhase] = useState<FlowPhase>("idle");
 	const [rsvp, setRsvp] = useState<RsvpDto | null>(null);
 	const [invitation, setInvitation] = useState<Invitation | null>(null);
@@ -97,9 +103,24 @@ export function useRsvpFlow() {
 		}
 	}
 
-	function changeRsvp() {
-		if (!readOnly) {
-			setError(null);
+	async function editRememberedRsvp() {
+		setPhase("submitting");
+		setError(null);
+		try {
+			const result = await lookupRememberedFn();
+			if (result.status !== "found") {
+				setError("not-found");
+				setPhase("idle");
+				return;
+			}
+			setRsvp(result.rsvp);
+			setInvitation(result.rsvp);
+			setReadOnly(result.readOnly);
+			setPhase(result.readOnly ? "confirmed" : "idle");
+		} catch (exception) {
+			setError(
+				exception instanceof Error ? exception.message : "Something went wrong",
+			);
 			setPhase("idle");
 		}
 	}
@@ -113,6 +134,6 @@ export function useRsvpFlow() {
 		identify,
 		submit: (input: GuestRsvpInput) => write(input, false),
 		update: (input: GuestRsvpInput) => write(input, true),
-		changeRsvp,
+		editRememberedRsvp,
 	};
 }

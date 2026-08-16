@@ -13,8 +13,7 @@ export const MANILA_CARD =
 export const INPUT_MANILA =
 	"rounded-md border-stone-900/30 bg-amber-50/80 font-mono text-case-ink placeholder:text-stone-500 focus-visible:border-stamp focus-visible:ring-stamp/30";
 
-export const MONO_LABEL =
-	"font-mono text-[11px] uppercase tracking-[0.2em] text-stone-600";
+export const MONO_LABEL = "font-mono text-sm leading-relaxed text-stone-600";
 
 export const PRIMARY_BUTTON =
 	"rounded-md bg-case-ink font-mono text-xs uppercase tracking-[0.2em] text-case-paper hover:bg-stone-800";
@@ -64,7 +63,7 @@ export function FactItem({
 			</span>
 			<span className="font-mono text-sm text-stone-800">
 				{label ? (
-					<span className="mb-0.5 block text-[10px] uppercase tracking-[0.25em] text-stone-500">
+					<span className="mb-0.5 block text-xs leading-relaxed text-stone-500">
 						{label}
 					</span>
 				) : null}

@@ -7,10 +7,9 @@ import {
 	MapPin,
 } from "lucide-react";
 
-import { FactItem, MONO_LABEL, Stamp } from "#/components/landing/case-ui";
+import { FactItem, MONO_LABEL } from "#/components/landing/case-ui";
 import {
 	Card,
-	CardAction,
 	CardContent,
 	CardDescription,
 	CardHeader,
@@ -34,18 +33,13 @@ export function RevealDocument() {
 	return (
 		<Card className="rounded-md bg-amber-50 text-case-ink shadow-2xl ring-stone-900/30 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-8 motion-safe:duration-700">
 			<CardHeader>
-				<div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.25em] text-green-800">
+				<div className="flex items-center gap-2 font-mono text-sm leading-relaxed text-green-800">
 					<LockOpen className="size-3.5" aria-hidden />
 					{m.reveal_kicker()}
 				</div>
 				<CardTitle className="display-title text-3xl text-case-ink sm:text-4xl">
 					{m.reveal_title()}
 				</CardTitle>
-				<CardAction>
-					<Stamp className="rotate-12 border-green-800/70 text-green-800/70">
-						{m.stamp_unsealed()}
-					</Stamp>
-				</CardAction>
 				<CardDescription className="font-mono text-sm leading-relaxed text-stone-700">
 					{m.reveal_body()}
 				</CardDescription>
@@ -67,20 +61,19 @@ export function RevealDocument() {
 							target="_blank"
 							rel="noreferrer"
 							aria-label={m.reveal_open_maps()}
-							className="text-case-ink underline decoration-stamp/60 underline-offset-4 transition-colors hover:text-stamp focus-visible:outline-2 focus-visible:outline-stamp"
 						>
 							{m.event_address()}
 						</a>
 					</FactItem>
 				</ul>
-				<div className="grid grid-cols-2 gap-4">
+				<div className="md:mt-4 -mx-2 grid gap-5 sm:mx-0 sm:grid-cols-2 sm:gap-4">
 					<figure className="-rotate-2 bg-white p-1.5 shadow-lg">
 						<img
 							src="/assets/venue-exterior-640.webp"
 							alt={m.alt_venue_exterior()}
 							width={640}
 							height={426}
-							className="w-full"
+							className="aspect-[4/3] w-full object-cover"
 						/>
 					</figure>
 					<figure className="rotate-2 bg-white p-1.5 shadow-lg">
@@ -89,7 +82,7 @@ export function RevealDocument() {
 							alt={m.alt_venue_interior()}
 							width={640}
 							height={426}
-							className="w-full"
+							className="aspect-[4/3] w-full object-cover"
 						/>
 					</figure>
 				</div>
@@ -103,17 +96,18 @@ export function RevealDocument() {
 				<Separator className="bg-stone-900/20" />
 				<div className="flex flex-col gap-2">
 					<p className={MONO_LABEL}>{m.reveal_dress_code_label()}</p>
-					<p className="flex items-center gap-2 font-mono text-sm text-stone-800">
-						<span
-							aria-hidden
-							className="size-2.5 shrink-0 rounded-full bg-pink-400"
-						/>
-						<span
-							aria-hidden
-							className="size-2.5 shrink-0 rounded-full bg-sky-400"
-						/>
-						{m.event_dress_code()}
-					</p>
+					<div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+						<span aria-hidden className="flex items-center gap-2">
+							<span className="size-3 shrink-0 rounded-full bg-pink-400" />
+							<span className="size-3 shrink-0 rounded-full bg-sky-400" />
+							<span className="size-3 shrink-0 rounded-full bg-green-400" />
+							<span className="size-3 shrink-0 rounded-full bg-yellow-300" />
+							<span className="size-3 shrink-0 rounded-full bg-white ring-1 ring-stone-400" />
+						</span>
+						<p className="font-mono text-sm text-stone-800">
+							{m.event_dress_code()}
+						</p>
+					</div>
 				</div>
 				<div className="flex flex-col gap-2">
 					<p className={MONO_LABEL}>{m.reveal_registry_label()}</p>

@@ -1,9 +1,67 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d527a51a-9f91-4a11-9204-fecc42daa19a",
+  "id": "8e6faead-54c3-4da4-941b-7736f61ddebe",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "invitations": {
+      "name": "invitations",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "guest_name": {
+          "name": "guest_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "additional_guest_allowance": {
+          "name": "additional_guest_allowance",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "invitations_phone_number_unique": {
+          "name": "invitations_phone_number_unique",
+          "columns": [
+            "phone_number"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "invitations_additional_guest_allowance_range": {
+          "name": "invitations_additional_guest_allowance_range",
+          "value": "\"invitations\".\"additional_guest_allowance\" between 0 and 3"
+        }
+      }
+    },
     "rsvps": {
       "name": "rsvps",
       "columns": {
@@ -14,16 +72,9 @@
           "notNull": true,
           "autoincrement": true
         },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name_key": {
-          "name": "name_key",
-          "type": "text",
+        "invitation_id": {
+          "name": "invitation_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -35,13 +86,13 @@
           "notNull": true,
           "autoincrement": false
         },
-        "party_size": {
-          "name": "party_size",
+        "additional_guest_count": {
+          "name": "additional_guest_count",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": 0
         },
         "theory": {
           "name": "theory",
@@ -66,50 +117,49 @@
         }
       },
       "indexes": {
-        "rsvps_name_key_unique": {
-          "name": "rsvps_name_key_unique",
+        "rsvps_invitation_id_unique": {
+          "name": "rsvps_invitation_id_unique",
           "columns": [
-            "name_key"
+            "invitation_id"
           ],
           "isUnique": true
         }
       },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "todos": {
-      "name": "todos",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "title": {
-          "name": "title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "(unixepoch())"
+      "foreignKeys": {
+        "rsvps_invitation_id_invitations_id_fk": {
+          "name": "rsvps_invitation_id_invitations_id_fk",
+          "tableFrom": "rsvps",
+          "tableTo": "invitations",
+          "columnsFrom": [
+            "invitation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "checkConstraints": {
+        "rsvps_attending_boolean": {
+          "name": "rsvps_attending_boolean",
+          "value": "\"rsvps\".\"attending\" in (0, 1)"
+        },
+        "rsvps_additional_guest_count_range": {
+          "name": "rsvps_additional_guest_count_range",
+          "value": "\"rsvps\".\"additional_guest_count\" between 0 and 3"
+        },
+        "rsvps_declined_without_additional_guests": {
+          "name": "rsvps_declined_without_additional_guests",
+          "value": "\"rsvps\".\"attending\" = 1 or \"rsvps\".\"additional_guest_count\" = 0"
+        },
+        "rsvps_theory_values": {
+          "name": "rsvps_theory_values",
+          "value": "\"rsvps\".\"theory\" is null or \"rsvps\".\"theory\" in ('girl', 'boy')"
+        }
+      }
     }
   },
   "views": {},

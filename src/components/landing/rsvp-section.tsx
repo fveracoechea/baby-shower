@@ -1,5 +1,6 @@
+import { useNavigate } from "@tanstack/react-router";
 import { FileText, Search } from "lucide-react";
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 
 import {
 	INPUT_MANILA,
@@ -10,7 +11,6 @@ import {
 	THEORY_ITEM,
 	TOGGLE_ITEM,
 } from "#/components/landing/case-ui";
-import { RevealDocument } from "#/components/landing/reveal-document";
 import { useRsvpFlow } from "#/components/landing/use-rsvp-flow";
 import { Button } from "#/components/ui/button";
 import {
@@ -28,7 +28,9 @@ import { Separator } from "#/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "#/components/ui/toggle-group";
 import { m } from "#/paraglide/messages";
 
-export function RsvpSection() {
+export function RsvpSection({ editRsvp = false }: { editRsvp?: boolean }) {
+	const navigate = useNavigate({ from: "/" });
+	const restoredEdit = useRef(false);
 	const {
 		phase,
 		rsvp,
@@ -38,7 +40,7 @@ export function RsvpSection() {
 		identify,
 		submit,
 		update,
-		changeRsvp,
+		editRememberedRsvp,
 	} = useRsvpFlow();
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [attending, setAttending] = useState<"yes" | "no" | null>(null);
@@ -56,6 +58,23 @@ export function RsvpSection() {
 			setTheory(rsvp.theory);
 		}
 	}, [phase, rsvp]);
+
+	useEffect(() => {
+		if (
+			(phase === "confirmed" ||
+				phase === "declined" ||
+				phase === "already-confirmed") &&
+			rsvp
+		) {
+			void navigate({ to: "/reveal" });
+		}
+	}, [navigate, phase, rsvp]);
+
+	useEffect(() => {
+		if (!editRsvp || restoredEdit.current) return;
+		restoredEdit.current = true;
+		void editRememberedRsvp();
+	}, [editRememberedRsvp, editRsvp]);
 
 	function identifyInvitation(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -76,7 +95,7 @@ export function RsvpSection() {
 		else submit(input);
 	}
 
-	if (phase === "confirmed" && rsvp) return <RevealDocument />;
+	if (phase === "confirmed" && rsvp) return null;
 	if (phase === "declined" && rsvp) {
 		return (
 			<Card className={MANILA_CARD}>
@@ -102,9 +121,9 @@ export function RsvpSection() {
 			id="rsvp"
 			className="scroll-mt-20 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 motion-safe:duration-500"
 		>
-			<Card className={`rotate-1 ${MANILA_CARD}`}>
+			<Card className={MANILA_CARD}>
 				<CardHeader>
-					<div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.25em] text-stone-500">
+					<div className="flex items-center gap-2 font-mono text-sm leading-relaxed text-stone-500">
 						<FileText className="size-3.5" aria-hidden />
 						{m.rsvp_kicker()}
 					</div>
@@ -140,11 +159,10 @@ export function RsvpSection() {
 							/>
 							<Button
 								type="submit"
-								variant="outline"
 								disabled={
 									submitting || readOnly || phoneNumber.trim().length < 7
 								}
-								className="border-stone-900/40 bg-transparent font-mono text-xs uppercase tracking-[0.15em] text-stone-800 hover:bg-amber-200/70 hover:text-case-ink"
+								className={PRIMARY_BUTTON}
 							>
 								<Search aria-hidden />
 								{m.rsvp_phone_submit()}
@@ -284,15 +302,6 @@ export function RsvpSection() {
 				</CardContent>
 				<CardFooter className="flex-col items-stretch gap-3">
 					<Separator className="bg-stone-900/20" />
-					{phase === "already-confirmed" && !readOnly ? (
-						<Button
-							type="button"
-							onClick={changeRsvp}
-							className={PRIMARY_BUTTON}
-						>
-							{m.already_change()}
-						</Button>
-					) : null}
 					{showRetrieval ? (
 						<form onSubmit={identifyInvitation} className="flex flex-col gap-2">
 							<Label htmlFor="rsvp-retrieval" className={MONO_LABEL}>

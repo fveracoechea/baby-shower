@@ -1,11 +1,18 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getRequestHeader } from "@tanstack/react-start/server";
+import {
+	getCookie,
+	getRequestHeader,
+	setCookie,
+} from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "#/db";
 import { invitations, rsvps } from "#/db/schema";
 import { lookupSchema, type RsvpDto, rsvpInputSchema } from "#/lib/rsvp";
 import { createRsvpService, type GuestRsvp } from "#/server/rsvp-service";
+
+const REVEAL_ACCESS_COOKIE = "reveal-access";
+const REVEAL_ACCESS_MAX_AGE = 60 * 60 * 24 * 90;
 
 const service = createRsvpService({
 	now: () => new Date(),
@@ -67,10 +74,19 @@ function rateLimit() {
 	}
 }
 
+function rememberRevealAccess(rsvp: GuestRsvp) {
+	setCookie(REVEAL_ACCESS_COOKIE, rsvp.phoneNumber, {
+		httpOnly: true,
+		maxAge: REVEAL_ACCESS_MAX_AGE,
+		path: "/",
+		sameSite: "lax",
+		secure: process.env.NODE_ENV === "production",
+	});
+}
+
 function toDto(rsvp: GuestRsvp): RsvpDto {
 	return {
 		...rsvp,
-		partySize: rsvp.additionalGuestCount + 1,
 		createdAt: rsvp.createdAt.getTime(),
 		updatedAt: rsvp.updatedAt.getTime(),
 	};
@@ -81,6 +97,7 @@ export const submitRsvp = createServerFn({ method: "POST" })
 	.handler(async ({ data }) => {
 		rateLimit();
 		const result = await service.submit(data);
+		if ("rsvp" in result && result.rsvp) rememberRevealAccess(result.rsvp);
 		return "rsvp" in result && result.rsvp
 			? { ...result, rsvp: toDto(result.rsvp) }
 			: result;
@@ -91,6 +108,7 @@ export const updateRsvp = createServerFn({ method: "POST" })
 	.handler(async ({ data }) => {
 		rateLimit();
 		const result = await service.update(data);
+		if ("rsvp" in result && result.rsvp) rememberRevealAccess(result.rsvp);
 		return "rsvp" in result && result.rsvp
 			? { ...result, rsvp: toDto(result.rsvp) }
 			: result;
@@ -101,7 +119,24 @@ export const lookupRsvp = createServerFn({ method: "GET" })
 	.handler(async ({ data }) => {
 		rateLimit();
 		const result = await service.retrieve(data);
+		if ("rsvp" in result && result.rsvp) rememberRevealAccess(result.rsvp);
 		return "rsvp" in result && result.rsvp
 			? { ...result, rsvp: toDto(result.rsvp) }
 			: result;
 	});
+
+export const lookupRememberedRsvp = createServerFn({ method: "GET" }).handler(
+	async () => {
+		rateLimit();
+		const phoneNumber = getCookie(REVEAL_ACCESS_COOKIE);
+		if (!phoneNumber) return { status: "not-found" as const };
+
+		const result = await service.retrieve({ phoneNumber });
+		if (result.status !== "found") {
+			return { status: "not-found" as const };
+		}
+
+		rememberRevealAccess(result.rsvp);
+		return { ...result, rsvp: toDto(result.rsvp) };
+	},
+);
