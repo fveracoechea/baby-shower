@@ -9,6 +9,7 @@ import { defineConfig } from "vite";
 
 const config = defineConfig({
 	resolve: { tsconfigPaths: true },
+	build: { assetsDir: "_build" },
 	plugins: [
 		paraglideVitePlugin({
 			project: "./project.inlang",
@@ -18,6 +19,26 @@ const config = defineConfig({
 		nitro({
 			preset: "node-server",
 			rollupConfig: { external: [/^@sentry\//] },
+			routeRules: {
+				"/assets/**": {
+					headers: {
+						"cache-control":
+							"public, max-age=86400, stale-while-revalidate=604800",
+					},
+				},
+				"/opengraph-image.png": {
+					headers: {
+						"cache-control":
+							"public, max-age=86400, stale-while-revalidate=604800",
+					},
+				},
+				"/drizzle.svg": {
+					headers: {
+						"cache-control":
+							"public, max-age=86400, stale-while-revalidate=604800",
+					},
+				},
+			},
 		}),
 		tailwindcss(),
 		tanstackStart(),
