@@ -16,7 +16,9 @@ describe("Invitation", () => {
 		render(<Invitation />);
 
 		expect(
-			screen.getByText("Wear pink, blue, green, yellow, or white."),
+			screen.getByText(
+				"Casual. White clothing is preferred, with optional blue or pink accessories based on your theory.",
+			),
 		).toBeDefined();
 		expect(
 			screen.getByText(

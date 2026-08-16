@@ -34,7 +34,9 @@ describe("Guest Reveal", () => {
 				.closest('[data-slot="card"]'),
 		).toBeNull();
 		expect(
-			screen.getByText("Wear pink, blue, green, yellow, or white."),
+			screen.getByText(
+				"Casual. White clothing is preferred, with optional blue or pink accessories based on your theory.",
+			),
 		).toBeDefined();
 		expect(
 			screen.getByRole("link", { name: "Open in Google Maps" }),
