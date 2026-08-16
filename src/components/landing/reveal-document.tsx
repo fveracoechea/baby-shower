@@ -22,6 +22,7 @@ import { m } from "#/paraglide/messages";
 const MAPS_URL = "https://maps.app.goo.gl/C36KF6Vh7rPCbdss6";
 const MAP_EMBED_URL =
 	"https://www.google.com/maps?q=60+E+Jefferson+St+Ste+A,+Hoschton,+GA+30548&output=embed";
+const REGISTRY_URL = "https://my.babylist.com/nf-baby-registry";
 
 /**
  * The Reveal: a second, unsealed document that slides up over the case
@@ -119,13 +120,16 @@ export function RevealDocument() {
 					<p className="font-mono text-sm leading-relaxed text-stone-700">
 						{m.event_registry_note()}
 					</p>
-					<span
-						aria-disabled="true"
-						className="inline-flex w-fit items-center gap-2 font-mono text-sm text-stone-500"
+					<a
+						href={REGISTRY_URL}
+						target="_blank"
+						rel="noreferrer"
+						className="inline-flex w-fit items-center gap-2 font-mono text-sm text-stone-800 underline decoration-stone-400 underline-offset-4 transition-colors hover:text-green-800"
 					>
 						<Gift className="size-4" aria-hidden />
 						{m.reveal_registry_cta()}
-					</span>
+						<ExternalLink className="size-3.5" aria-hidden />
+					</a>
 				</div>
 				<p className="border-t border-stone-900/15 pt-4 text-center font-mono text-xs text-stone-500">
 					{m.beat4_body()}
