@@ -29,5 +29,6 @@ describe("Invitation", () => {
 		expect(
 			screen.getByRole("link", { name: "File your RSVP" }).getAttribute("href"),
 		).toBe("/rsvp");
+		expect(screen.getByText("RSVP by September 21")).toBeDefined();
 	});
 });

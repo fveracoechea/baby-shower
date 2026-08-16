@@ -156,7 +156,22 @@
 html,
 body,
 #app {
+  min-width: 100%;
   min-height: 100%;
+}
+
+@supports (min-height: 100svh) {
+  html,
+  body,
+  #app {
+    min-width: 100svw;
+    min-height: 100svh;
+  }
+}
+
+html {
+  color-scheme: dark;
+  background-color: var(--bg-base);
 }
 
 html,

@@ -24,6 +24,10 @@ export const Route = createRootRoute({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
+				name: "theme-color",
+				content: "#0c0a09",
+			},
+			{
 				title: "Baby Shower",
 			},
 		],

@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import {
 	Calendar,
+	CalendarClock,
 	ClipboardList,
 	Clock3,
 	FolderOpen,
@@ -67,10 +68,14 @@ export function Invitation() {
 						{m.invite_sealed_note()}
 					</p>
 				</CardContent>
-				<CardFooter>
+				<CardFooter className="flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
 					<Button asChild variant="case">
 						<Link to="/rsvp">{m.rsvp_title()}</Link>
 					</Button>
+					<p className="flex items-center gap-2 font-mono text-sm font-bold leading-relaxed text-stamp">
+						<CalendarClock className="size-4 shrink-0" aria-hidden />
+						{m.invite_rsvp_cutoff()}
+					</p>
 				</CardFooter>
 			</Card>
 
