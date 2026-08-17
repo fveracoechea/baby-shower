@@ -13,9 +13,11 @@ vi.mock("@tanstack/react-router", () => ({
 
 describe("Reveal outcome", () => {
 	it("shows only the declined message and edit action when the Guest cannot attend", () => {
-		render(<RevealOutcome attending={false} canEdit />);
+		render(
+			<RevealOutcome attending={false} canEdit guestName="Maria Garcia" />,
+		);
 
-		expect(screen.getByText("We will miss you")).toBeDefined();
+		expect(screen.getByText("We will miss you, Maria Garcia")).toBeDefined();
 		expect(screen.queryByText("Thank you, detective")).toBeNull();
 		expect(screen.queryByTitle("Open in Google Maps")).toBeNull();
 		expect(

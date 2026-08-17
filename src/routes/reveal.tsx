@@ -19,7 +19,7 @@ export const Route = createFileRoute("/reveal")({
 });
 
 function RevealPage() {
-	const { attending, canEdit } = Route.useLoaderData();
+	const { attending, canEdit, guestName } = Route.useLoaderData();
 
 	return (
 		<main className="relative min-h-svh overflow-x-clip px-4 py-20 sm:py-24">
@@ -30,7 +30,11 @@ function RevealPage() {
 			/>
 			<GuestNavigation active="rsvp" />
 			<div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-6">
-				<RevealOutcome attending={attending} canEdit={canEdit} />
+				<RevealOutcome
+					attending={attending}
+					canEdit={canEdit}
+					guestName={guestName}
+				/>
 			</div>
 		</main>
 	);

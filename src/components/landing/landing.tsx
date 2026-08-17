@@ -13,7 +13,13 @@ export type LandingView = "case" | "invitation";
  * plays as auto-advancing scenes, and the guest lands on the invitation
  * and then lands the Guest on the Invitation.
  */
-export function Landing({ view = "case" }: { view?: LandingView }) {
+export function Landing({
+	view = "case",
+	guestName,
+}: {
+	view?: LandingView;
+	guestName: string | null;
+}) {
 	const [stage, setStage] = useState<Stage>(
 		view === "invitation" ? "invite" : "envelope",
 	);
@@ -66,7 +72,7 @@ export function Landing({ view = "case" }: { view?: LandingView }) {
 
 			{stage === "invite" ? (
 				<div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-16 px-4 pt-20 pb-16 sm:py-24">
-					<Invitation />
+					<Invitation guestName={guestName} />
 					<Witnesses />
 				</div>
 			) : null}

@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Landing, type LandingView } from "#/components/landing/landing";
 import { m } from "#/paraglide/messages";
 import { paraglideRequestMiddleware } from "#/server/locale";
+import { getRememberedGuestName } from "#/server/rsvp";
 
 export const Route = createFileRoute("/")({
 	validateSearch: (search): { view?: LandingView } => ({
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/")({
 	server: {
 		middleware: [paraglideRequestMiddleware],
 	},
+	loader: () => getRememberedGuestName(),
 	head: () => ({
 		meta: [
 			{ title: m.meta_title() },
@@ -46,5 +48,6 @@ export const Route = createFileRoute("/")({
 
 function InvitationPage() {
 	const { view } = Route.useSearch();
-	return <Landing view={view} />;
+	const guestName = Route.useLoaderData();
+	return <Landing view={view} guestName={guestName} />;
 }

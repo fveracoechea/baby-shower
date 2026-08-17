@@ -13,13 +13,16 @@ vi.mock("@tanstack/react-router", () => ({
 
 describe("Guest Reveal", () => {
 	it("shows the map and registry in the post-RSVP Reveal document", () => {
-		render(<RevealDocument canEdit />);
+		render(<RevealDocument canEdit guestName="Maria Garcia" />);
 
 		const map = screen.getByTitle("Open in Google Maps");
 		const footerCopy = screen.getByText(
 			"The mystery stays sealed until October 10. Then our family and friends will follow the clues, test their theories, and solve the case together.",
 		);
 		expect(map.getAttribute("src")).toContain("google.com/maps");
+		expect(
+			screen.getByRole("heading", { name: "Thank you, Maria Garcia" }),
+		).toBeDefined();
 		expect(map.classList.contains("grayscale-[70%]")).toBe(true);
 		expect(map.classList.contains("lg:h-96")).toBe(true);
 		expect(footerCopy.closest("footer")).not.toBeNull();

@@ -206,9 +206,12 @@ export function RsvpForm({ editRsvp = false }: { editRsvp?: boolean }) {
 									aria-hidden
 								/>
 								<div className="min-w-0">
-									<p className="break-words font-mono text-sm font-bold text-stone-900">
-										{m.rsvp_invitation_for({ name: invitation.name })}
+									<p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-green-800">
+										{m.rsvp_invitation_for()}
 									</p>
+									<h2 className="display-title mt-1 break-words text-3xl leading-tight text-case-ink sm:text-4xl">
+										{invitation.name}
+									</h2>
 									<p className="mt-1 font-mono text-xs leading-relaxed text-stone-500">
 										{m.rsvp_response_intro()}
 									</p>

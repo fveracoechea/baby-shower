@@ -41,7 +41,7 @@ const WITNESSES = [
  * The invitation overview: the case file with the event facts (city only)
  * and pinned evidence photos. The CTA scrolls to the RSVP.
  */
-export function Invitation() {
+export function Invitation({ guestName }: { guestName: string | null }) {
 	return (
 		<section className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
 			<Card variant="manila">
@@ -58,6 +58,16 @@ export function Invitation() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="flex flex-col gap-5">
+					{guestName ? (
+						<div className="border-y border-stone-900/20 py-4">
+							<p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-stamp">
+								{m.invite_guest_label()}
+							</p>
+							<h2 className="display-title mt-1 break-words text-3xl text-case-ink sm:text-4xl">
+								{guestName}
+							</h2>
+						</div>
+					) : null}
 					<ul className="flex flex-col gap-3">
 						<FactItem icon={Calendar}>{m.event_date_long()}</FactItem>
 						<FactItem icon={Clock3}>{m.event_time()}</FactItem>

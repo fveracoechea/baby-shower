@@ -11,20 +11,22 @@ import { m } from "#/paraglide/messages";
 export function RevealOutcome({
 	attending,
 	canEdit,
+	guestName,
 }: {
 	attending: boolean;
 	canEdit: boolean;
+	guestName: string;
 }) {
 	return (
 		<>
 			{attending ? (
-				<RevealDocument canEdit={canEdit} />
+				<RevealDocument canEdit={canEdit} guestName={guestName} />
 			) : (
 				<Card>
 					<CardHeader>
 						<RevealActions canEdit={canEdit} dark />
-						<CardTitle className="text-amber-100">
-							{m.declined_title()}
+						<CardTitle role="heading" aria-level={1} className="text-amber-100">
+							{m.declined_title({ name: guestName })}
 						</CardTitle>
 						<CardDescription className="text-stone-300">
 							{m.declined_body()}

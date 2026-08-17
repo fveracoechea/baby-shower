@@ -21,7 +21,13 @@ const MAP_EMBED_URL =
  * dress code, registry. It never hints at the baby's sex: the answer
  * comes out live at the party.
  */
-export function RevealDocument({ canEdit = false }: { canEdit?: boolean }) {
+export function RevealDocument({
+	canEdit = false,
+	guestName,
+}: {
+	canEdit?: boolean;
+	guestName: string;
+}) {
 	return (
 		<div className="flex flex-col gap-8">
 			<Card variant="paper">
@@ -31,7 +37,9 @@ export function RevealDocument({ canEdit = false }: { canEdit?: boolean }) {
 						<LockOpen className="size-3.5" aria-hidden />
 						{m.reveal_kicker()}
 					</div>
-					<CardTitle className="sm:text-4xl">{m.reveal_title()}</CardTitle>
+					<CardTitle role="heading" aria-level={1} className="sm:text-4xl">
+						{m.reveal_guest_title({ name: guestName })}
+					</CardTitle>
 					<CardDescription>{m.reveal_body()}</CardDescription>
 				</CardHeader>
 				<CardContent className="flex flex-col gap-6">

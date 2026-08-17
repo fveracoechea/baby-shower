@@ -114,6 +114,7 @@ describe("RSVP section", () => {
 		render(<RsvpForm />);
 		fireEvent.click(screen.getByLabelText("Yes, I will be there"));
 
+		expect(screen.getByRole("heading", { name: "Maria Garcia" })).toBeDefined();
 		expect(screen.queryByText("Additional guests attending")).toBeNull();
 	});
 

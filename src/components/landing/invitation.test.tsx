@@ -13,8 +13,10 @@ vi.mock("@tanstack/react-router", () => ({
 
 describe("Invitation", () => {
 	it("shows the dress code and gift information before RSVP", () => {
-		render(<Invitation />);
+		render(<Invitation guestName="Maria Garcia" />);
 
+		expect(screen.getByText("Invitation prepared for")).toBeDefined();
+		expect(screen.getByRole("heading", { name: "Maria Garcia" })).toBeDefined();
 		expect(
 			screen.getByText(
 				"Casual. White clothing is preferred, with optional blue or pink accessories based on your theory.",

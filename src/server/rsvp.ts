@@ -3,6 +3,7 @@ import {
 	getCookie,
 	getRequestHeader,
 	setCookie,
+	setResponseHeader,
 } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 
@@ -138,5 +139,22 @@ export const lookupRememberedRsvp = createServerFn({ method: "GET" }).handler(
 
 		rememberRevealAccess(result.rsvp);
 		return { ...result, rsvp: toDto(result.rsvp) };
+	},
+);
+
+export const getRememberedGuestName = createServerFn({ method: "GET" }).handler(
+	async () => {
+		setResponseHeader("Cache-Control", "private, no-store");
+		setResponseHeader("Vary", "Cookie");
+
+		const phoneNumber = getCookie(REVEAL_ACCESS_COOKIE);
+		if (!phoneNumber) return null;
+
+		const [invitation] = await db
+			.select({ name: invitations.guestName })
+			.from(invitations)
+			.where(eq(invitations.phoneNumber, phoneNumber))
+			.limit(1);
+		return invitation?.name ?? null;
 	},
 );
